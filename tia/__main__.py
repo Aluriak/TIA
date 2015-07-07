@@ -28,7 +28,7 @@ e.start()  # thread start
 
 while not input(''):
     from random import randint
-    e.add_command(MoveCommand(1.0, u, target=Coords(randint(0,10), randint(0,10))))
+    e.add_command(MoveCommand(0.0, u, target=Coords(randint(0,10), randint(0,10))))
 
 e.add_command(QuitCommand(0.0))
 
