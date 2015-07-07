@@ -22,7 +22,9 @@ class Agent:
         self.name   = name
 
     @property
-    def movable(self): return False
+    def movable(self):  return False
+    @property
+    def drawable(self): return False
 
 ###############################################################################
 # INTERFACE WITH OTHER OBJECTS
