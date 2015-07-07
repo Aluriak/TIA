@@ -26,7 +26,10 @@ e.add_command(MoveCommand(0.0, u, target=Coords(4, 1)))
 print('Press return key for quit immediatly')
 e.start()  # thread start
 
-input('')
+while not input(''):
+    from random import randint
+    e.add_command(MoveCommand(1.0, u, target=Coords(randint(0,10), randint(0,10))))
+
 e.add_command(QuitCommand(0.0))
 
 e.join()
