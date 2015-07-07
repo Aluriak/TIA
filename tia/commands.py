@@ -9,27 +9,52 @@ from tia.coords  import Coords
 ###############################################################################
 # MOVE
 ###############################################################################
-class MoveCommand(Command):
-    """
+class RecursiveMoveCommand(Command):
+    """Move unit to target. Create another instance
+    of RecursiveMoveCommand for perform the next steps.
     """
 
-    def __init__(self, time_shift, unit, target=None):
+    def __init__(self, time_shift, unit):
         super().__init__(time_shift)
-        self.unit = unit
-        if target is not None:
-            self.unit.target = target
+        self.unit   = unit
 
     def execute(self, engine):
         """
         """
-        if not self.unit.movable or self.unit.target is None: return
-        if engine.move_to_target(self.unit):
-            self.unit.target = None
-        else:  # target not reached
-            engine.add_command(
-                MoveCommand(self.unit.speed, self.unit)
-            )
+        if self.unit.target:  # target defined
+            if engine.move(self.unit):  # target reached
+                self.unit.target = None
+            else:  # target not reached
+                engine.add_command(RecursiveMoveCommand(
+                    self.unit.speed,
+                    self.unit
+                ))
 
+
+class MoveCommand(Command):
+    """Move unit to target, or stop the motion if no target
+    """
+
+    def __init__(self, time_shift, unit, target=None):
+        super().__init__(time_shift)
+        self.unit   = unit
+        self.target = target
+
+    def execute(self, engine):
+        """
+        """
+        if not self.unit.movable: return
+        if self.unit.target:
+            # already move: get new target
+            self.unit.target = self.target
+        elif self.target:
+            # not in moving, and new target
+            assert(self.unit.target is None)
+            self.unit.target = self.target
+            engine.add_command(RecursiveMoveCommand(
+                self.unit.speed,
+                self.unit
+            ))
 
 
 ###############################################################################

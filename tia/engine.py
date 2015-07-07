@@ -30,14 +30,24 @@ class Engine(threading.Thread):
     def say(self, message):
         print('Gimme the ' + message + ' !')
 
-    def move_to_target(self, unit):
+    def move(self, unit):
+        """Operate a step for the unit move.
+
+        Return True iff unit reach its target.
+        In this case, unit.target will be set to None.
+        """
+        if not unit.movable: return
         def sign(x): return 1 if x > 0 else (-1 if x < 0 else 0)
         unit.coords = unit.coords + Coords(
             sign(unit.target.x - unit.coords.x),
             sign(unit.target.y - unit.coords.y),
         )
+        # debug
         print(str(unit) + ' is at ' + str(unit.coords))
-        return unit.coords == unit.target
+        # return target reached truth
+        target_reached = unit.coords == unit.target
+        if target_reached: unit.target = None
+        return target_reached
 
     def quit(self):
         print('Quit !')
