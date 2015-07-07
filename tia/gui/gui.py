@@ -99,7 +99,6 @@ def init(engine):
         MOUSE_POSITION = (x, y)
         if buttons == pyglet.window.mouse.LEFT:
             SELECTION = _agent_at(x, y)
-            print(SELECTION, 'at', Coords(x, y))
         elif buttons == pyglet.window.mouse.RIGHT and SELECTION is not None:
             WINDOW.engine.add_command(MoveCommand(SELECTION, Coords(x, y)))
 
@@ -155,16 +154,6 @@ def _add_squad(engine, coords=None):
                         randint(0,VIDEO_MODE_Y))
     engine.add_agent(Squad('Alpha', coords))
 
-
-def _delPoint(point):
-    """Delete given Point"""
-    global dt, dragged_point
-    if point is not None:
-        if dragged_point == point:
-            dragged_point = None
-        dt.delTrianguledObject(point)
-
-
 def _agent_at(x, y):
     """Return agent that is at given coordinates (about MOUSE_PRECISION)"""
     try:
@@ -173,30 +162,6 @@ def _agent_at(x, y):
     except StopIteration:
         return None
 
-
-def _movePoint(x, y, p):
-    """Add given values to (x;y) of given point"""
-    global dt
-    if p is not None:
-        dt.movTrianguledObject(p, (x, y))
-
-
-def _moveAllPoints():
-    """Move all vertices by a small move"""
-    global dt, dragged_point
-    for v in dt.trianguledObjects():
-        eps = 1
-        mx = choice([-eps,eps])
-        my = choice([-eps,eps])
-        if v is not dragged_point:
-            dt.movTrianguledObject(v, (mx, my))
-
-
-def _snapshot():
-    global dt
-    print('\nsnapshot:')
-    for c in (o.coordinates() for o in dt.trianguledObjects()):
-        print('\t_addPointToDT' + str((c.x, c.y)))
 
 
 
