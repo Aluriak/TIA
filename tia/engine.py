@@ -1,8 +1,10 @@
 """
 """
 import threading
-from tia.coords import Coords
+from tia.coords         import Coords
 from tia.priority_queue import PriorityQueue
+from tia.agents         import Agent
+from tia.mixins         import Placable
 import tia.time_scheduler as time
 
 
@@ -17,6 +19,8 @@ class Engine(threading.Thread):
         super().__init__()
         self.terminated = False
         self.invoker    = PriorityQueue(self)
+        self.agents     = set()  # contains all Agent
+        self.observers  = set()  # contains all observers
 
     def run(self):
         while not self.terminated:
@@ -24,6 +28,33 @@ class Engine(threading.Thread):
 
     def add_command(self, command):
         self.invoker.put(command)
+
+    def add_agent(self, agent):
+        assert(isinstance(agent, Agent))
+        self.agents.add(agent)
+
+    def rmv_agent(self, agent):
+        assert(issubclass(agent, Agent))
+        try:
+            self.agents.remove(agent)
+        except KeyError:
+            pass
+
+    def agents_with(self, properties):
+        return (a for a in self.agents
+                if all(isinstance(a, p) for p in properties))
+
+    def register_observer(self, observer):
+        self.observers.add(observer)
+
+    def deregister_observer(self, observer):
+        try:
+            self.observers.remove(observer)
+        except KeyError:
+            pass
+
+    def notify_observers(self):
+        map(lambda o: o.update(), self.observers)
 
 ###############################################################################
 # GAME ENGINE API
@@ -54,6 +85,12 @@ class Engine(threading.Thread):
     def quit(self):
         print('Quit !')
         self.terminated = True
+
+    def agents_at(self, coords, precision=1.):
+        return (
+            agent for agent in self.agents_with((Placable,))
+            if agent.coords.distance_to(coords) <= precision
+        )
 
 
 
