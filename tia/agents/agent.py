@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Definition of a Unit object, that is a printable object with some attributes
+Definition of an Agent object, that is a printable object with some attributes
 commons to all objects in the game.
 
 """
@@ -9,7 +9,7 @@ from tia.coords import Coords
 
 
 
-class Unit:
+class Agent:
     """
     """
 

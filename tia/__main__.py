@@ -1,6 +1,6 @@
 
 
-from tia.units          import Squad
+from tia.agents         import Squad
 from tia.coords         import Coords
 from tia.engine         import Engine
 from tia.commands       import PrintCommand, MoveCommand, QuitCommand
