@@ -3,6 +3,7 @@
 import threading
 from tia.coords import Coords
 from tia.priority_queue import PriorityQueue
+import tia.time_scheduler as time
 
 
 class Engine(threading.Thread):
@@ -43,7 +44,8 @@ class Engine(threading.Thread):
             sign(unit.target.y - unit.coords.y),
         )
         # debug
-        print(str(unit) + ' is at ' + str(unit.coords))
+        print(str(unit) + ' is at ' + str(unit.coords) + ' and go to '
+              + str(unit.target) + ' at ' + str(time.time()))
         # return target reached truth
         target_reached = unit.coords == unit.target
         if target_reached: unit.target = None
