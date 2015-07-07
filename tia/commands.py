@@ -37,7 +37,7 @@ class MoveCommand(Command):
     """Move unit to target, or stop the motion if no target
     """
 
-    def __init__(self, time_shift, unit, target=None):
+    def __init__(self, unit, target=None, time_shift=0.01):
         super().__init__(time_shift)
         self.unit   = unit
         self.target = target
@@ -66,7 +66,7 @@ class PrintCommand(Command):
     """
     """
 
-    def __init__(self, time_shift, message):
+    def __init__(self, message, time_shift=0.01):
         super().__init__(time_shift)
         self.message = message
 

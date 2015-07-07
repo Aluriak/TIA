@@ -8,7 +8,7 @@ class Command:
     """
     """
 
-    def __init__(self, time_shift):
+    def __init__(self, time_shift=0.01):
         self.time = time.time() + time_shift
 
 
