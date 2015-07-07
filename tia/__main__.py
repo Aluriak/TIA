@@ -4,7 +4,7 @@ from tia.agents         import Squad
 from tia.coords         import Coords
 from tia.engine         import Engine
 from tia.commands       import PrintCommand, MoveCommand, QuitCommand
-import tia.gui as gui
+from tia.gui            import WorldView
 from random import randint
 
 
@@ -12,9 +12,9 @@ if True:
     # initialization
     engine = Engine()
     engine.start()  # thread start
+    gui = WorldView(engine)
     engine.register_observer(gui)
-    gui = gui.init(engine)
-    gui.run()  # thread start
+    gui.run()
     engine.join()  # wait the end
 
 else:

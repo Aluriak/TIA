@@ -1,1 +1,1 @@
-from tia.gui.gui import init, run
+from tia.gui.gui import WorldView
