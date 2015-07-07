@@ -22,7 +22,9 @@ class RecursiveMoveCommand(Command):
         """
         """
         if self.unit.target:  # target defined
-            if engine.move(self.unit):  # target reached
+            # move, and create a move action if necessary
+            target_reached = engine.move(self.unit)
+            if target_reached:
                 self.unit.target = None
             else:  # target not reached
                 engine.add_command(RecursiveMoveCommand(
