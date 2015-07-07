@@ -4,26 +4,38 @@ from tia.agents         import Squad
 from tia.coords         import Coords
 from tia.engine         import Engine
 from tia.commands       import PrintCommand, MoveCommand, QuitCommand
+import tia.gui as gui
+from random import randint
 
 
-# initialization
-e = Engine()
-p = e.invoker
-u = Squad('Alpha', Coords(0, 0))
+if True:
+    # initialization
+    engine = Engine()
+    engine.start()  # thread start
+    engine.register_observer(gui)
+    gui = gui.init(engine)
+    gui.run()  # thread start
+    engine.join()  # wait the end
 
-# printings and start engine thread
-print('Press return key for continue, write something before for quit')
-e.start()  # thread start
+else:
+    # initialization
+    engine = Engine()
+    u = Squad('Alpha', Coords(0, 0))
 
-# main loop
-input('')
-e.add_command(MoveCommand(0.0, u, target=Coords(4, 1)))
-while not input(''):
-    from random import randint
-    e.add_command(MoveCommand(0.0, u, target=Coords(randint(0,10), randint(0,10))))
+    # printings and start engine thread
+    print('Press return key for continue, write something before for quit')
+    engine.start()  # thread start
 
-# quit command and wait for engine end
-e.add_command(QuitCommand(0.0))
-e.join()
+    # main loop
+    input('')
+    engine.add_command(MoveCommand(u, target=Coords(4, 1)))
+    while not input(''):
+        engine.add_command(MoveCommand(
+            u, target=Coords(randint(0,10), randint(0,10))
+        ))
+
+    # quit command and wait for engine end
+    engine.add_command(QuitCommand())
+    engine.join()
 
 
