@@ -16,13 +16,13 @@ class Agent:
 ###############################################################################
 # CONSTRUCTION
 ###############################################################################
-    def __init__(self, name, coords):
-        assert(isinstance(coords, Coords))
-        self.coords = coords
+    def __init__(self, name):
         self.name   = name
 
     @property
     def movable(self):  return False
+    @property
+    def placable(self): return False
     @property
     def drawable(self): return False
 
