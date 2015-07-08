@@ -6,6 +6,11 @@ from tia.engine         import Engine
 from tia.commands       import PrintCommand, MoveCommand, QuitCommand
 from tia.gui            import WorldView
 from random import randint
+import tia.commons as commons
+
+
+LOGGER = commons.logger()
+
 
 
 if True:

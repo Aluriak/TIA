@@ -6,6 +6,11 @@ from tia.priority_queue import PriorityQueue
 from tia.agents         import Agent
 from tia.mixins         import Placable
 import tia.time_scheduler as time
+import tia.commons        as commons
+
+
+LOGGER = commons.logger()
+
 
 
 class Engine(threading.Thread):
