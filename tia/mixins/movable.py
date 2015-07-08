@@ -10,7 +10,7 @@ class Movable:
 
     def __init__(self):
         self.target = None
-        self.speed  = 1.0
+        self.speed  = 0.1
 
     @property
     def movable(self): return True
