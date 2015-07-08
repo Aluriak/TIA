@@ -88,8 +88,7 @@ class WorldView(pyglet.window.Window):
             if self.mouse_position is not None:
                 self._add_squad(Coords(*self.mouse_position))
         elif symbol == key.ESCAPE:
-            self.engine.add_command(QuitCommand())
-            self.close()
+            self.on_close()
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = (x, y)
@@ -121,6 +120,10 @@ class WorldView(pyglet.window.Window):
         pyglet.graphics.draw(len(tuple(agents)), pyglet.gl.GL_POINTS,
                                  ('v2i', coords),
                             )
+
+    def on_close(self):
+        self.engine.add_command(QuitCommand())
+        self.close()
 
 
 
