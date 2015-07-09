@@ -26,8 +26,10 @@ class Engine(threading.Thread):
         self.invoker    = PriorityQueue(self)
         self.agents     = set()  # contains all Agent
         self.observers  = set()  # contains all observers
+        LOGGER.info('Engine: initialized')
 
     def run(self):
+        LOGGER.info('Engine: thread started')
         while not self.terminated:
             self.invoker.execute_next()
 
@@ -65,7 +67,7 @@ class Engine(threading.Thread):
 # GAME ENGINE API
 ###############################################################################
     def say(self, message):
-        print('Gimme the ' + message + ' !')
+        LOGGER.info('Engine: say: ' + message)
 
     def move(self, unit):
         """Operate a step for the unit move.
@@ -88,7 +90,7 @@ class Engine(threading.Thread):
         return target_reached
 
     def quit(self):
-        print('Quit !')
+        LOGGER.info('Engine: quit')
         self.terminated = True
 
     def agents_at(self, coords, precision=1.):
