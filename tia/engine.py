@@ -4,6 +4,7 @@ import threading
 from tia.coords         import Coords
 from tia.priority_queue import PriorityQueue
 from tia.agents         import Agent
+from tia.player         import Player
 from tia.mixins         import Placable
 import tia.time_scheduler as time
 import tia.commons        as commons
@@ -25,6 +26,7 @@ class Engine(threading.Thread):
         self.terminated = False
         self.invoker    = PriorityQueue(self)
         self.agents     = set()  # contains all Agent
+        self.players    = set()  # contains all Player
         self.observers  = set()  # contains all observers
         LOGGER.info('Engine: initialized')
 
@@ -39,6 +41,10 @@ class Engine(threading.Thread):
     def add_agent(self, agent):
         assert(isinstance(agent, Agent))
         self.agents.add(agent)
+
+    def add_player(self, player):
+        assert(isinstance(player, Player))
+        self.players.add(player)
 
     def rmv_agent(self, agent):
         assert(issubclass(agent, Agent))
@@ -98,6 +104,7 @@ class Engine(threading.Thread):
             agent for agent in self.agents_with((Placable,))
             if agent.coords.distance_to(coords) <= precision
         )
+
 
 
 
