@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Terminal interface for the game.
-Substitute for the future Qt interface.
+Creation of the prompt used by terminal interface.
+Call create_prompt(0) function for receive a callable that manage the user prompt.
+
+parse(1) function take the callable in parameter and returns
+the user request ready to be treated.
 
 """
 
@@ -9,18 +12,6 @@ Substitute for the future Qt interface.
 #########################
 # IMPORTS               #
 #########################
-# from tia.info        import PACKAGE_NAME
-# from tia.mixins      import Placable
-# from tia.coords      import Coords
-# from tia.commands    import MoveCommand, QuitCommand
-# from tia.agents      import Squad
-# from pyglet.window   import key
-# from pyglet.window   import mouse
-# import itertools
-# import functools
-# import pyglet
-# import types
-
 from prompt_toolkit.contrib.completers                   import WordCompleter
 from prompt_toolkit.contrib.regular_languages.compiler   import compile as pt_compile
 from prompt_toolkit.contrib.regular_languages.completion import GrammarCompleter
@@ -28,56 +19,42 @@ from prompt_toolkit.contrib.regular_languages.lexer      import GrammarLexer
 from prompt_toolkit.shortcuts                            import get_input
 from prompt_toolkit.styles                               import DefaultStyle
 from pygments.token                                      import Token
+from collections                                         import defaultdict, ChainMap
 import tia.commons as commons
 import tia.agents
 import itertools
+import functools
 import math
 
 LOGGER = commons.logger()
 
 # some precomputed values
-AGENTS_NAME = tuple(
-    n.lower() for n, c in tia.agents.__dict__.items()
+AGENT_CLASS = {
+    n.lower(): c
+    for n, c in tia.agents.__dict__.items()
     if callable(c) and issubclass(c, tia.agents.Agent)
-)
-# commands, subcommmands and arguments
-# COMMAND_REQUEST = ('request', 'r', 'req')
-# COMMAND_HELP    = ('help', 'h')
-# COMMAND_QUIT    = ('quit', 'q', 'exit')
-# SUBCOMMAND_AGENT= AGENTS_NAME
-# ARGUMENT_ALL    = (r'.*',)
-# ARGUMENT_COORDS = (r'[0-9]+[,; ][0-9]+',)
-
-# # aggregations
-# COMMANDS    = COMMAND_REQUEST + COMMAND_HELP + COMMAND_QUIT
-# SUBCOMMANDS = SUBCOMMAND_AGENT
-# ARGUMENTS   = ARGUMENT_ALL + ARGUMENT_COORDS
-
-# # link between level name and aggregations
-# LEVELS = {
-    # 'cmd'    : COMMANDS,
-    # 'subcmd' : SUBCOMMANDS,
-    # 'args'   : ARGUMENTS,
-# }
+    and c is not tia.agents.Agent
+}
+AGENTS_NAME = tuple(AGENT_CLASS.keys())
+# lexems tokens for pygments
 TOKENS = {
     'cmd'    : Token.Command,
     'subcmd' : Token.Operator,
     'args'   : Token.Other,
 }
 
-# (sub)commands regex and aliases
+# commands regex and aliases
 COMMANDS = {
     'request': ('request', 'r', 'req'),
     'help'   : ('help', 'h'),
     'quit'   : ('quit', 'q', 'exit'),
 }
-COMMANDS_REV = {v:k for k, v in COMMANDS.items()}
 SUBCOMMANDS = {
     'agent'  : AGENTS_NAME,
 }
 ARGUMENTS = {
     'args'   : (r'.*',),
-    'coords' : (r'[0-9]+[,; ][0-9]+',),
+    'coords' : (r'[0-9]+\s[0-9]+',),
 }
 # link between level name and dict
 LEVELS = {
@@ -85,6 +62,17 @@ LEVELS = {
     'subcmd' : SUBCOMMANDS,
     'args'   : ARGUMENTS,
 }
+# reverse dicts
+unalias_level = lambda d: {alias:k for k, aliases in d.items() for alias in aliases}
+COMMANDS_UNALIAS = unalias_level(COMMANDS)
+SUBCOMMANDS_UNALIAS = unalias_level(SUBCOMMANDS)
+ARGUMENTS_UNALIAS = unalias_level(ARGUMENTS)
+UNALIAS = ChainMap({}, COMMANDS_UNALIAS, SUBCOMMANDS_UNALIAS, ARGUMENTS_UNALIAS)
+REV_LEVELS = defaultdict(lambda: 'args', {cmd:level
+              for level, cmds in LEVELS.items()
+              for cmds in cmds.values()
+              for cmd  in cmds
+             })
 # printings values
 DEFAULT_INTRO = 'Type help or ? to list commands.\n'
 DEFAULT_PROMPT = '?>'
@@ -102,13 +90,15 @@ def commands_grammar():
             + ') |\n'
         )
     # get grammar, log it and return it
-    grammar = (
+    global GRAMMAR_RAW
+    GRAMMAR_RAW = (
         cmd2grm('request', 'agent' , 'coords')
         + cmd2grm('help' ,  None   ,  None   )
         + cmd2grm('quit' ,  None   ,  None   )
     )
-    LOGGER.debug('GRAMMAR:\n' + grammar)
-    return pt_compile(grammar)
+    LOGGER.debug('GRAMMAR:\n' + GRAMMAR_RAW)
+    return pt_compile(GRAMMAR_RAW)
+GRAMMAR     = commands_grammar()
 
 
 class ExampleStyle(DefaultStyle):
@@ -121,9 +111,9 @@ class ExampleStyle(DefaultStyle):
    })
 
 
-def test():
-    grammar = commands_grammar()
 
+
+def create_prompt():
     lexer = {
         name : token
         for token, level in ((Token.Command , COMMANDS),
@@ -133,7 +123,7 @@ def test():
         for name in names
     }
     print('LEXER:', lexer)
-    lexer = GrammarLexer(grammar, lexer)
+    lexer = GrammarLexer(GRAMMAR, lexer)
 
     completer = {
         k: WordCompleter(v)
@@ -142,45 +132,34 @@ def test():
     }
     print('COMPLETER:', completer)
     completer = GrammarCompleter(
-        grammar,
+        GRAMMAR,
         completer
     )
 
-    try:
-        # REPL loop.
-        while True:
-            # Read input and parse the result.
-            text = get_input(DEFAULT_PROMPT, lexer=lexer,
-                             completer=completer, style=ExampleStyle)
-            m = grammar.match(text)
-            if m is None:
-                print('invalid command')
-                continue
-            var = m.variables()
-            print(var.__dict__)
-            print(var.get('request'))
-            if 'request' in var:
-                assert('agent' in var)
-                assert('coords' in var)
-            else:
-                print(var)
-    except EOFError:
-        pass
+    return functools.partial(
+        get_input,
+        message=DEFAULT_PROMPT,  # text at the beginning
+        lexer=lexer, completer=completer,  # cf above
+        style=ExampleStyle,  # pygmentation
+        patch_stdout=True,  # printings occurs above the prompt line
+    )
 
 
+def parse(prompt):
+    """return parsed and formatted user request from prompt
+    returned by create_prompt function
 
-
-
-class ManagementInterface:
     """
-    """
-
-
-    def __init__(self, player):
-        self.player = player
-        pass
-
-
+    # Read input and parse the result.
+    m = GRAMMAR.match(prompt())
+    if m is None:
+        print('invalid command')
+        return None, None, None
+    var = defaultdict(lambda: None, {
+        REV_LEVELS[alias]: alias
+        for _, alias, _ in m.variables().__dict__['_tuples']
+    })
+    return UNALIAS[var['cmd']], var['subcmd'], var['args']
 
 
 
