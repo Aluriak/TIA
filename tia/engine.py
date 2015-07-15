@@ -66,8 +66,8 @@ class Engine(threading.Thread):
         except KeyError:
             pass
 
-    def notify_observers(self):
-        map(lambda o: o.update(), self.observers)
+    def notify_observers(self, *args):
+        tuple(o.update(*args) for o in self.observers)
 
 ###############################################################################
 # GAME ENGINE API

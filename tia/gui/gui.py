@@ -74,15 +74,16 @@ class WorldView(pyglet.window.Window, threading.Thread):
         pyglet.app.exit()
 
 
-    def update(**kwargs):
+    def update(self, *args, **kwargs):
         """part of Observer pattern, updated by engine"""
-        raise NotImplementedError
         # define default values, update them with given ones
         kwarg = {
             'terminated' : False,  # True if engine have quit
-            'new reports': None,   # an iterable of new reports
+            'new report' : None,   # new unit report
             'new unit'   : None,   # new unit
-        }.update(kwargs)
+        }
+        kwarg.update(**kwargs)
+        kwarg.update(*args)
 
 
 
