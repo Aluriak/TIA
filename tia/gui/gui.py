@@ -20,6 +20,7 @@ from tia.commands    import MoveCommand, QuitCommand
 from tia.agents      import Squad
 from pyglet.window   import key
 from pyglet.window   import mouse
+import threading
 import itertools
 import functools
 import pyglet
@@ -43,7 +44,7 @@ MOUSE_PRECISION       = 20.
 ###############################################################################
 # WORLD VIEW CLASS
 ###############################################################################
-class WorldView(pyglet.window.Window):
+class WorldView(pyglet.window.Window, threading.Thread):
 
     def __init__(self, engine):
         """create the pyglet window, initialize all"""
@@ -51,6 +52,7 @@ class WorldView(pyglet.window.Window):
             width=VIDEO_MODE_X, height=VIDEO_MODE_Y,
             caption=PACKAGE_NAME
         )
+        threading.Thread.__init__(self)
         self.engine = engine
         self.selected_agent = None
         self.mouse_position = None
@@ -72,11 +74,15 @@ class WorldView(pyglet.window.Window):
         pyglet.app.exit()
 
 
-    def update(*args, **kwargs):
-        """part of Observer pattern"""
+    def update(**kwargs):
+        """part of Observer pattern, updated by engine"""
         raise NotImplementedError
-        #TODO: read that:
-        #   https://pyglet.readthedocs.org/en/pyglet-1.2-maintenance/programming_guide/events.html#implementing-the-observer-pattern
+        # define default values, update them with given ones
+        kwarg = {
+            'terminated' : False,  # True if engine have quit
+            'new reports': None,   # an iterable of new reports
+            'new unit'   : None,   # new unit
+        }.update(kwargs)
 
 
 
