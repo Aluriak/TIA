@@ -3,6 +3,7 @@
 """
 from tia.command import Command
 from tia.coords  import Coords
+from tia.agents  import Agent
 
 
 
@@ -57,6 +58,24 @@ class MoveCommand(Command):
                 self.unit.speed,
                 self.unit
             ))
+
+
+
+###############################################################################
+# ADD AGENT
+###############################################################################
+class AddAgentCommand(Command):
+    """
+    """
+    def __init__(self, agent, time_shift=0.01):
+        super().__init__(time_shift)
+        assert(isinstance(agent, Agent))
+        assert(agent.__class__ is not Agent)
+        self.agent = agent
+
+    def execute(self, engine):
+        engine.add_agent(self.agent)
+
 
 
 ###############################################################################
