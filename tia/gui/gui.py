@@ -151,7 +151,7 @@ class WorldView(pyglet.window.Window, threading.Thread):
         if coords is None:
             coords = Coords(randint(0,VIDEO_MODE_X),
                             randint(0,VIDEO_MODE_Y))
-        self.engine.add_agent(Squad('Alpha', coords))
+        self.engine.add_agent(Squad(coords))
 
     def _agent_at(self, x, y):
         """Return agent that is at given coordinates (about MOUSE_PRECISION)"""

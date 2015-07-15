@@ -53,7 +53,7 @@ class TerminalManagementInterface:
         """perform a request for a new unit"""
         agent, coords = subcmd, Coords(args.split(' '))
         self.engine.add_command(AddAgentCommand(
-            prompt.AGENT_CLASS[agent]('gérard', coords)
+            prompt.AGENT_CLASS[agent](coords)
         ))
 
 
