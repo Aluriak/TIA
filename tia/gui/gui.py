@@ -136,7 +136,7 @@ class WorldView(pyglet.window.Window, threading.Thread):
                                  ('v2i', coords),
                             )
 
-    def on_close(self, propagate_to_engine=False):
+    def on_close(self, *, propagate_to_engine=False):
         if propagate_to_engine:
             self.close()
         self.engine.add_command(QuitCommand())
