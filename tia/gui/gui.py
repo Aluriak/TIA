@@ -107,6 +107,8 @@ class WorldView(pyglet.window.Window, threading.Thread):
         self.mouse_position = (x, y)
         if buttons == pyglet.window.mouse.LEFT:
             self.selected_agent = self._agent_at(x, y)
+            if self.selected_agent:
+                print(self.selected_agent)
         elif buttons == pyglet.window.mouse.RIGHT and self.selected_agent is not None:
             self.engine.add_command(MoveCommand(self.selected_agent, Coords(x, y)))
 
