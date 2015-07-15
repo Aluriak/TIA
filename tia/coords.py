@@ -3,9 +3,13 @@ import math
 
 class Coords:
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self, x, y=None):
+        if y is None:
+            self.x, self.y = x
+        else:
+            self.x = x
+            self.y = y
+        self.x, self.y = int(self.x), int(self.y)
 
     def __add__(self, othr):
         return Coords(self.x + othr.x, self.y + othr.y)
