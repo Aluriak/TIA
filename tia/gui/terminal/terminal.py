@@ -39,7 +39,6 @@ class TerminalManagementInterface:
                 cmd, subcmd, args = prompt.parse(self.prompt)
                 if cmd is None:
                     continue
-                print('MANAGER:', cmd, subcmd, args)
                 assert(cmd in self.__class__.__dict__)
                 self.__class__.__dict__[cmd](self, subcmd, args)
         except EOFError:
@@ -49,14 +48,13 @@ class TerminalManagementInterface:
             self.quit()
 
 
+
     def request(self, subcmd, args):
         """perform a request for a new unit"""
         agent, coords = subcmd, Coords(args.split(' '))
-        print('FUNC:', agent, coords)
         self.engine.add_command(AddAgentCommand(
             prompt.AGENT_CLASS[agent]('gérard', coords)
         ))
-
 
 
     def quit(self, subcmd=None, args=None):
@@ -64,6 +62,7 @@ class TerminalManagementInterface:
         assert(subcmd is None and args is None)
         self.terminated = True
         self.engine.add_command(QuitCommand())
+
 
     def help(self, subcmd=None, args=None):
         """print the help"""

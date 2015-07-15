@@ -122,7 +122,7 @@ def create_prompt():
         for names in level.values()
         for name in names
     }
-    print('LEXER:', lexer)
+    # print('LEXER:', lexer)
     lexer = GrammarLexer(GRAMMAR, lexer)
 
     completer = {
@@ -130,7 +130,7 @@ def create_prompt():
         for item in LEVELS.values()
         for k, v in item.items()
     }
-    print('COMPLETER:', completer)
+    # print('COMPLETER:', completer)
     completer = GrammarCompleter(
         GRAMMAR,
         completer
