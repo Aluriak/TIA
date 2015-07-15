@@ -4,7 +4,8 @@ Definition of an Agent object, that is a printable object with some attributes
 commons to all objects in the game.
 
 """
-from tia.coords import Coords
+from tia.coords     import Coords
+from tia.ressources import random_agent_name
 
 
 
@@ -16,8 +17,10 @@ class Agent:
 ###############################################################################
 # CONSTRUCTION
 ###############################################################################
-    def __init__(self, name):
-        self.name   = name
+    def __init__(self, name=None):
+        if name is None:
+            name = random_agent_name()
+        self.name = name
 
     @property
     def movable(self):  return False
@@ -38,7 +41,12 @@ class Agent:
         if isinstance(othr, Coords):
             return self.coords + othr
 
-
     def __str__(self):
-        return self.name
+        bases = (base for base in self.__class__.__bases__
+                 if base is not Agent)
+        return (
+            self.__class__.__name__ + ' ' + self.name + ' '
+            + ' '.join(base.__str__(self) for base in bases)
+        )
+
 

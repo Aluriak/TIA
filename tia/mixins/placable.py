@@ -15,4 +15,6 @@ class Placable:
     @property
     def placable(self): return True
 
+    def __str__(self):
+        return '[' + str(self.coords) + ']'
 

@@ -1,11 +1,20 @@
 """
 """
-from random import randint, randrange, choice
+from random    import randint, randrange, choice
+from itertools import cycle
 import random
+import tia.commons as commons
 
 
+# names from ressources files
+#  get an infinite generator
+with open(commons.DIR_RESSOURCES + 'names.txt') as fd:
+    NAMES = [l.strip('\n') for l in fd]
+    random.shuffle(NAMES)
+    NAMES = cycle(NAMES)
 
-nouns = tuple(set((
+
+NOUNS = tuple(set((
     'animal',
     'approval',
     'atom',
@@ -34,7 +43,7 @@ nouns = tuple(set((
     'slave',
 )))
 
-adjectives = tuple(set((
+ADJECTIVES = tuple(set((
     'absolute',
     'approving',
     'blue',
@@ -66,28 +75,29 @@ adjectives = tuple(set((
     'tumbling',
 )))
 
-name_firsts = tuple(set((
+NAME_FIRSTS = tuple(set((
     'our',
     'the',
-))) + adjectives
+))) + ADJECTIVES
+
 
 def once(x):
     """True once an x"""
     return randint(0, x) == 0
 
-def random_name():
+def random_player_name():
     """Return a generated name"""
     subtitle = once(2)
     origin   = once(2)
     name = (
-        choice(name_firsts).title()
-        + ' ' + choice(adjectives)
-        + ' ' + choice(nouns)
+        choice(NAME_FIRSTS).title()
+        + ' ' + choice(ADJECTIVES)
+        + ' ' + choice(NOUNS)
     )
     if subtitle:
-        name += ', the ' + choice(adjectives) + ' '  + choice(nouns)
+        name += ', the ' + choice(ADJECTIVES) + ' '  + choice(NOUNS)
     if origin:
-        name += ' of '  + choice(adjectives) + ' ' + choice(nouns)
+        name += ' of '  + choice(ADJECTIVES) + ' ' + choice(NOUNS)
     shortname = ''.join(
         l[0] for l in random.sample(tuple(
             w for w in name.replace(',', '').split(' ')
@@ -95,6 +105,12 @@ def random_name():
         ), 3)
     ).upper()
     return name, shortname
+
+
+def random_agent_name():
+    """Return a randomly generated name that can be given to an agent"""
+    return next(NAMES)
+
 
 
 
