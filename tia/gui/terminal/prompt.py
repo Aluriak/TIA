@@ -46,11 +46,13 @@ TOKENS = {
 # commands regex and aliases
 COMMANDS = {
     'request': ('request', 'r', 'req'),
+    'lists'  : ('ls', 'l', 'lists', 'listing'),
     'help'   : ('help', 'h'),
     'quit'   : ('quit', 'q', 'exit'),
 }
 SUBCOMMANDS = {
     'agent'  : AGENTS_NAME,
+    'player' : ('players', 'player'),
 }
 ARGUMENTS = {
     'args'   : (r'.*',),
@@ -93,6 +95,8 @@ def commands_grammar():
     global GRAMMAR_RAW
     GRAMMAR_RAW = (
         cmd2grm('request', 'agent' , 'coords')
+        + cmd2grm('lists', 'player',  None   )
+        + cmd2grm('lists', 'agent' ,  None   )
         + cmd2grm('help' ,  None   ,  None   )
         + cmd2grm('quit' ,  None   ,  None   )
     )

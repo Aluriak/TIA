@@ -64,6 +64,15 @@ class TerminalManagementInterface:
         self.engine.add_command(QuitCommand())
 
 
+    def lists(self, subcmd, args=None):
+        """give list of players or agents"""
+        if subcmd == 'players':
+            subjects = self.engine.players
+        else:
+            subjects = self.engine.agents
+        print('\n'.join(str(_) for _ in subjects))
+
+
     def help(self, subcmd=None, args=None):
         """print the help"""
         print('Grammar:\n', prompt.GRAMMAR_RAW, '\n', sep='')
