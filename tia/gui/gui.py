@@ -81,9 +81,12 @@ class WorldView(pyglet.window.Window, threading.Thread):
             'terminated' : False,  # True if engine have quit
             'new report' : None,   # new unit report
             'new unit'   : None,   # new unit
+            'quit'       : False,  # True if engine is stopped
         }
         kwarg.update(**kwargs)
         kwarg.update(*args)
+        if kwarg['quit']:
+            self.on_close(propagate_to_engine=True)
 
 
 
@@ -128,9 +131,10 @@ class WorldView(pyglet.window.Window, threading.Thread):
                                  ('v2i', coords),
                             )
 
-    def on_close(self):
+    def on_close(self, propagate_to_engine=False):
         self.engine.add_command(QuitCommand())
-        self.close()
+        if propagate_to_engine:
+            self.close()
 
 
 
