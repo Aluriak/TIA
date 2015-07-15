@@ -118,7 +118,10 @@ class WorldView(pyglet.window.Window, threading.Thread):
 
     def on_draw(self):
         self.clear()
-        self._draw_agents()
+        try:
+            self._draw_agents()
+        except pyglet.gl.lib.GLException:
+            self.on_close()
 
     def _draw_agents(self):
         """Print current state of engine"""
