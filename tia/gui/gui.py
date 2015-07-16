@@ -66,10 +66,8 @@ class WorldView(pyglet.window.Window, threading.Thread):
                                        INTERFACE_TIME_SPEED)
 
     def run(self):
-        """launch the pyglet event handler
-
-        start function needs to be called first"""
-        # run pyglet printings
+        """launch the pyglet event handler and associated printings"""
+        # run pyglet
         pyglet.app.run()
         pyglet.app.exit()
 
@@ -86,7 +84,7 @@ class WorldView(pyglet.window.Window, threading.Thread):
         kwarg.update(**kwargs)
         kwarg.update(*args)
         if kwarg['quit']:
-            self.on_close(propagate_to_engine=True)
+            self.on_close(propagate_to_engine=False)
 
 
 
@@ -124,6 +122,7 @@ class WorldView(pyglet.window.Window, threading.Thread):
             self._draw_agents()
         except pyglet.gl.lib.GLException:
             self.on_close()
+            print('pyglet.gl.lib.GLException raised')
 
     def _draw_agents(self):
         """Print current state of engine"""
@@ -136,10 +135,10 @@ class WorldView(pyglet.window.Window, threading.Thread):
                                  ('v2i', coords),
                             )
 
-    def on_close(self, *, propagate_to_engine=False):
+    def on_close(self, *, propagate_to_engine=True):
+        self.close()
         if propagate_to_engine:
-            self.close()
-        self.engine.add_command(QuitCommand())
+            self.engine.add_command(QuitCommand())
 
 
 
