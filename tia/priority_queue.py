@@ -30,5 +30,8 @@ class PriorityQueue(queue.PriorityQueue):
             command = self.get(block=True)
         command.execute(self.target)
 
+    def add(self, command):
+        """alias for put method"""
+        return self.put(command)
 
 
