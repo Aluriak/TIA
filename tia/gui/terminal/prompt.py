@@ -32,7 +32,7 @@ LOGGER = commons.logger()
 AGENT_CLASS = {
     n.lower(): c
     for n, c in tia.agents.__dict__.items()
-    if callable(c) and issubclass(c, tia.agents.Agent)
+    if type(c) is type and issubclass(c, tia.agents.Agent)
     and c is not tia.agents.Agent
 }
 AGENTS_NAME = tuple(AGENT_CLASS.keys())
