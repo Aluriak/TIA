@@ -14,7 +14,7 @@ Commands:
 # IMPORTS               #
 #########################
 from tia.info        import PACKAGE_NAME
-from tia.mixins      import Placable
+from tia.mixins      import Drawable
 from tia.coords      import Coords
 from tia.commands    import MoveCommand, QuitCommand
 from tia.agents      import Squad
@@ -127,7 +127,7 @@ class WorldView(pyglet.window.Window, threading.Thread):
     def _draw_agents(self):
         """Print current state of engine"""
         if len(self.engine.agents) == 0: return
-        agents = self.engine.agents_with((Placable,))
+        agents = self.engine.agents_with((Drawable,))
         agents, coords = zip(*tuple((a, a.coords) for a in agents))
         coords = tuple(itertools.chain(*coords))
 
