@@ -13,48 +13,63 @@ with open(commons.DIR_RESSOURCES + 'names.txt') as fd:
     random.shuffle(NAMES)
     NAMES = cycle(NAMES)
 
+NOUNS_AND_ADJECTIVES = tuple(set((
+    'orange',
+    'pastafarist',
+    'remote',
+    'slave',
+    'walker',
+)))
+
 
 NOUNS = tuple(set((
     'animal',
     'approval',
     'atom',
+    'banana',
     'beaver',
     'bus shelter',
     'bread',
     'cat',
-    'colored',
     'connection',
     'day',
-    'walker',
     'michel',
     'mood',
     'music',
     'nothing',
-    'pastafarist',
-    'person',
     'octopus',
     'odyssey',
-    'orange',
+    'person',
+    'phase',
     'seal',
     'server',
     'solar',
     'space',
+    'teapot',
+    'wapiti',
     '64',
-    'slave',
-)))
+))) + NOUNS_AND_ADJECTIVES
 
 ADJECTIVES = tuple(set((
     'absolute',
     'approving',
     'blue',
+    'bringer',
+    'clanic',
+    'colored',
     'commander',
     'commodor',
+    'connected',
     'controlable',
     'clockwork',
     'drawing',
     'dreaming',
     'drooling',
     'enraging',
+    'evil',
+    'green',
+    'geometric',
+    'freudian',
     'inefficient',
     'flying',
     'forgiving',
@@ -63,22 +78,29 @@ ADJECTIVES = tuple(set((
     'growing',
     'globbing',
     'hiding',
+    'isometric',
     'little',
     'master',
     'mister',
     'mysterious',
-    'orange',
+    'paster',
     'questionnable',
     'red',
-    'remote',
     'speaking',
     'tumbling',
-)))
+    'yanker',
+))) + NOUNS_AND_ADJECTIVES
 
 NAME_FIRSTS = tuple(set((
     'our',
     'the',
-))) + ADJECTIVES
+)))# + ADJECTIVES
+
+SUPERLATIFS = tuple(set((
+    'very',
+    'smallest',
+    'slowest',
+)))
 
 
 def once(x):
@@ -87,17 +109,27 @@ def once(x):
 
 def random_player_name():
     """Return a generated name"""
-    subtitle = once(2)
-    origin   = once(2)
+    first       = once(3)
+    subtitle    = once(2)
+    origin      = once(2)
+    superlatif1 = once(3)
+    superlatif2 = once(3)
+
     name = (
         choice(NAME_FIRSTS).title()
         + ' ' + choice(ADJECTIVES)
         + ' ' + choice(NOUNS)
     )
     if subtitle:
-        name += ', the ' + choice(ADJECTIVES) + ' '  + choice(NOUNS)
+        name += ', the '
+        if superlatif1:
+            name += choice(SUPERLATIFS) + ' '
+        name += choice(ADJECTIVES) + ' ' + choice(NOUNS)
     if origin:
-        name += ' of '  + choice(ADJECTIVES) + ' ' + choice(NOUNS)
+        name += ' of '
+        if superlatif2:
+            name += choice(SUPERLATIFS) + ' '
+        name += choice(ADJECTIVES) + ' ' + choice(NOUNS)
     shortname = ''.join(
         l[0] for l in random.sample(tuple(
             w for w in name.replace(',', '').split(' ')
