@@ -15,4 +15,7 @@ class Drawable:
     @property
     def drawable(self): return True
 
+    def __str__(self):
+        return '[DRAWABLE]'
+
 
