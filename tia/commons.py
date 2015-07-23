@@ -14,11 +14,13 @@ LOGGER         = logger()
 
 
 # Function that can be used for automatic import of classes
-def module_classes(module_name, recursive=False):
+def module_classes(module_name, recursive=False, keepif=lambda x: True):
     """Return a dict str:type that contains all classes
     (name:class) defined in files in the same directory.
 
     If recursive is True, all directories under are explored.
+    Keepif, if given, must be a callable that take a class as only argument,
+     and returns True iff the class must be kept.
     """
     if recursive:
         LOGGER.warning('tia.commons.module_classes(2):'
@@ -43,6 +45,7 @@ def module_classes(module_name, recursive=False):
         for n, cls in imported(module).__dict__.items()
         # cls is a class, defined in the tia.mixins package
         if type(cls) is type and module_name in cls.__module__
+        and keepif(cls)
     }
 
 
