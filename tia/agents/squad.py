@@ -1,20 +1,15 @@
 """
 """
 from tia.coords import Coords
-from tia.agents import Agent
-from tia.mixins import Movable, Placable
+from tia.agents import Troop
+from tia.mixins import Movable, Placable, Drawable
 
 
 
-class Squad(Placable, Movable, Agent):
+class Squad(Troop):
     """
     """
 
     def __init__(self, coords, name=None):
-        Agent.__init__(self, name)
-        Placable.__init__(self, coords)
-        Movable.__init__(self)
+        Troop.__init__(self, coords, name)
 
-
-    def __str__(self):
-        return Agent.__str__(self)
