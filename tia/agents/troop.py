@@ -1,6 +1,7 @@
 """
 Definition of the mother class of all troops.
 """
+from itertools  import chain
 from tia.coords import Coords
 from tia.agents import Agent
 from tia.mixins import Movable, Placable, Drawable
@@ -17,6 +18,12 @@ class Troop(Placable, Movable, Drawable, Agent):
         Movable.__init__(self)
         Drawable.__init__(self, None)
 
-
     def __str__(self):
         return Agent.__str__(self)
+
+    @property
+    def _bases(self):
+        """Return generator of bases"""
+        return chain(self.__class__.__bases__, Troop.__bases__)
+
+

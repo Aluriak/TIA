@@ -42,11 +42,16 @@ class Agent:
             return self.coords + othr
 
     def __str__(self):
-        bases = (base for base in self.__class__.__bases__
-                 if base is not Agent)
+        bases = (base for base in self._bases
+                 if not issubclass(base, Agent))
         return (
             self.__class__.__name__ + ' ' + self.name + ' '
             + ' '.join(base.__str__(self) for base in bases)
         )
+
+    @property
+    def _bases(self):
+        """Return bases"""
+        return self.__class__.__bases__
 
 
