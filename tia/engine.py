@@ -7,7 +7,7 @@ from tia.priority_queue import PriorityQueue
 from tia.agents         import Agent
 from tia.player         import Player
 from tia.mixins         import Placable
-from tia.command        import Command
+from tia.commands       import Command
 import tia.time_scheduler as time
 import tia.commons        as commons
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 """
-from tia.command import Command
-from tia.coords  import Coords
-from tia.agents  import Agent
+from tia.commands import Command
+from tia.coords   import Coords
+from tia.agents   import Agent
 
 
 
