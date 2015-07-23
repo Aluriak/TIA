@@ -1,11 +1,13 @@
 """
 """
 import threading
+import itertools
 from tia.coords         import Coords
 from tia.priority_queue import PriorityQueue
 from tia.agents         import Agent
 from tia.player         import Player
 from tia.mixins         import Placable
+from tia.command        import Command
 import tia.time_scheduler as time
 import tia.commons        as commons
 
@@ -24,16 +26,41 @@ class Engine(threading.Thread):
     def __init__(self):
         super().__init__()
         self.terminated = False
-        self.invoker    = PriorityQueue(self)
-        self.agents     = set()  # contains all Agent
-        self.players    = set()  # contains all Player
         self.observers  = set()  # contains all observers
+        self.containables = (Agent, Player, Command)
+        self.containers = {  # associate a class to a container
+            cls: set()
+            for cls in self.containables
+        }
+        # exception : commands are contained in a PriorityQueue
+        self.containers[Command] = PriorityQueue(self)
+        # shortcuts to the containers
+        self.invoker = self.containers[Command]
+        self.players = self.containers[Player]
+        self.agents  = self.containers[Agent]
         LOGGER.info('Engine: initialized')
 
     def run(self):
         LOGGER.info('Engine: thread started')
         while not self.terminated:
             self.invoker.execute_next()
+
+    def add(self, obj):
+        """add object to the container associated
+
+        For instance, a command will be added to the container
+        that contains commands.
+        """
+        # get the first recognized motherclass
+        try:
+            self.containers[next(
+                cls for cls in self.containables
+                if isinstance(obj, cls)
+            )].add(obj)
+        except StopIteration:
+            # no valid motherclass
+            LOGGER.warning('engine.add(2) receive a non valid object '
+                           + str(obj) + ' of ' + str(obj.__class__))
 
     def add_command(self, command):
         self.invoker.put(command)
@@ -54,7 +81,7 @@ class Engine(threading.Thread):
             pass
 
     def agents_with(self, properties):
-        return (a for a in self.agents
+        return (a for a in self.containers[Agent]
                 if all(isinstance(a, p) for p in properties))
 
     def register_observer(self, observer):
