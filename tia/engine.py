@@ -138,6 +138,15 @@ class Engine(threading.Thread):
         time.toggle_pause()
 
 
+###############################################################################
+# GAME ENGINE PROPERTIES
+###############################################################################
+    @property
+    def space_width(self): return self.agents.max_coords.x
+
+    @property
+    def space_height(self): return self.agents.max_coords.y
+
 
 
 

@@ -49,7 +49,8 @@ class WorldView(pyglet.window.Window, threading.Thread):
     def __init__(self, engine):
         """create the pyglet window, initialize all"""
         super().__init__(
-            width=VIDEO_MODE_X, height=VIDEO_MODE_Y,
+            # width=VIDEO_MODE_X, height=VIDEO_MODE_Y,
+            width=engine.space_width, height=engine.space_height,
             caption=PACKAGE_NAME
         )
         threading.Thread.__init__(self)
