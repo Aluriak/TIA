@@ -8,6 +8,41 @@ from tia.agents   import Agent
 
 
 ###############################################################################
+# ADD AGENT
+###############################################################################
+class AddAgentCommand(Command):
+    """
+    """
+    def __init__(self, agent, time_shift=0.01):
+        super().__init__(time_shift)
+        assert(isinstance(agent, Agent))
+        assert(agent.__class__ is not Agent)
+        self.agent = agent
+
+    def execute(self, engine):
+        engine.add(self.agent)
+        # new agent must emit its first report
+        engine.add(EmitReportCommand(self.agent.new_report()))
+
+
+
+###############################################################################
+# EMIT REPORT
+###############################################################################
+class EmitReportCommand(Command):
+    """
+    """
+
+    def __init__(self, report, time_shift=0.01):
+        super().__init__(time_shift)
+        self.report = report
+
+    def execute(self, engine):
+        engine.add_report(self.report)
+
+
+
+###############################################################################
 # MOVE
 ###############################################################################
 class RecursiveMoveCommand(Command):
@@ -62,23 +97,6 @@ class MoveCommand(Command):
 
 
 ###############################################################################
-# ADD AGENT
-###############################################################################
-class AddAgentCommand(Command):
-    """
-    """
-    def __init__(self, agent, time_shift=0.01):
-        super().__init__(time_shift)
-        assert(isinstance(agent, Agent))
-        assert(agent.__class__ is not Agent)
-        self.agent = agent
-
-    def execute(self, engine):
-        engine.add_agent(self.agent)
-
-
-
-###############################################################################
 # PRINT
 ###############################################################################
 class PrintCommand(Command):
@@ -103,6 +121,21 @@ class QuitCommand(Command):
 
     def execute(self, engine):
         engine.quit()
+
+
+
+###############################################################################
+# TOGGLE_PAUSE
+###############################################################################
+class TogglePauseCommand(Command):
+    """
+    """
+
+    def __init__(self, time_shift=0.0):
+        super().__init__(time_shift)
+
+    def execute(self, engine):
+        engine.toggle_pause()
 
 
 

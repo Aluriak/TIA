@@ -81,6 +81,7 @@ class Engine(threading.Thread):
             pass
 
     def agents_with(self, properties):
+        """Return a generator of agents that have given properties"""
         return (a for a in self.containers[Agent]
                 if all(isinstance(a, p) for p in properties))
 

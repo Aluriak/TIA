@@ -16,7 +16,7 @@ Commands:
 from tia.info        import PACKAGE_NAME
 from tia.mixins      import Drawable
 from tia.coords      import Coords
-from tia.commands    import MoveCommand, QuitCommand
+from tia.commands    import MoveCommand, QuitCommand, TogglePauseCommand
 from tia.agents      import Squad
 from pyglet.window   import key
 from pyglet.window   import mouse
@@ -97,6 +97,8 @@ class WorldView(pyglet.window.Window, threading.Thread):
                 self._add_squad(Coords(*self.mouse_position))
         elif symbol == key.ESCAPE:
             self.on_close()
+        elif symbol == key.P:
+            self.engine.add_command(TogglePauseCommand())
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = (x, y)
