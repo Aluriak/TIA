@@ -14,7 +14,7 @@ Commands:
 # IMPORTS               #
 #########################
 from tia.info        import PACKAGE_NAME
-from tia.mixins      import Drawable
+from tia.mixins      import Drawable, Movable
 from tia.coords      import Coords
 from tia.commands    import MoveCommand, QuitCommand, TogglePauseCommand
 from tia.agents      import Squad
@@ -24,6 +24,7 @@ import threading
 import itertools
 import functools
 import pyglet
+import random
 import types
 
 
@@ -100,6 +101,8 @@ class WorldView(pyglet.window.Window, threading.Thread):
             self.on_close()
         elif symbol == key.P:
             self.engine.add_command(TogglePauseCommand())
+        elif symbol == key.M:
+            self._move_agents()
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = (x, y)
@@ -151,8 +154,8 @@ class WorldView(pyglet.window.Window, threading.Thread):
     def _add_squad(self, coords=None):
         """Add a random point in DT"""
         if coords is None:
-            coords = Coords(randint(0,VIDEO_MODE_X),
-                            randint(0,VIDEO_MODE_Y))
+            coords = Coords(random.randint(0,800),
+                            random.randint(0,800))
         self.engine.add_agent(Squad(coords))
 
     def _agent_at(self, x, y):
@@ -163,6 +166,31 @@ class WorldView(pyglet.window.Window, threading.Thread):
         except StopIteration:
             return None
 
+    def _move_agents(self, agents=None, coords=None):
+        """Move given agents to given coords
+
+        if no agents and no coords given, all movables agents will
+         be move to a random location
+        """
+        if agents is None:
+            for movable in self.engine.agents_with((Movable,)):
+                x = random.randint(0,800)
+                y = random.randint(0,600)
+                self.engine.add_command(MoveCommand(movable,
+                                                    Coords(x, y)))
+        else:
+            assert(coords is not None)
+            [self.engine.add_command(MoveCommand(agent, target))
+             for agent, target in zip(agents, coords)]
+
+    def _load_images(self):
+        """populate the list of available images"""
+        self.image = tuple(
+            # pyglet.load.image(image)
+            image
+            for image in commons.ressources('png')
+        )
+        print(self.image)
 
 
 
