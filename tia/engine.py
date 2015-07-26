@@ -133,6 +133,8 @@ class Engine(threading.Thread):
             if agent.coords.distance_to(coords) <= precision
         )
 
+    def toggle_pause(self):
+        time.toggle_pause()
 
 
 
