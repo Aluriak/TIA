@@ -42,6 +42,7 @@ class Placer(dict):
 
     def __iter__(self):
         return iter(self.values())
+
     def remove(self, placable, new_coords=None):
         del self[placable.coords.as_pair]
         placable.coords = new_coords

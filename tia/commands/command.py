@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 """
 import tia.time_scheduler as time
