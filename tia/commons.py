@@ -2,6 +2,7 @@
 
 import os
 import importlib
+import itertools
 from functools  import partial
 from tia.info   import PACKAGE_NAME
 from tia.logger import logger, log_level
@@ -10,7 +11,31 @@ from tia.logger import logger, log_level
 # Directory and file paths
 DIR_DATA       = 'data/'
 DIR_RESSOURCES = DIR_DATA + 'ressources/'
+DIR_IMAGES     = DIR_RESSOURCES + 'images/'
 LOGGER         = logger()
+
+
+def all_files(path):
+    """yield files in given directory"""
+    dirs = [path]
+    for f in os.listdir(dirs):
+        if os.isdir(f):
+            dirs.append(f)
+        else:
+            yield f
+
+def ressources(ext=None):
+    """Return a generator of ressources of given extension(s)"""
+    if isinstance(ext, str):
+        print('load ' + ext)
+        return (_ for _ in all_files(DIR_RESSOURCES) if _.endswith(ext))
+    elif ext is None:
+        # get all ressources
+        return (_ for _ in all_files(DIR_RESSOURCES))
+    else:
+        # recursive call
+        print(ext)
+        return itertools.chain(*(ressources(_) for _ in ext))
 
 
 # Function that can be used for automatic import of classes
