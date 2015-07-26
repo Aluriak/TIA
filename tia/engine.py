@@ -4,6 +4,7 @@ import threading
 import itertools
 from tia.coords         import Coords
 from tia.priority_queue import PriorityQueue
+from tia.placer         import Placer
 from tia.agents         import Agent
 from tia.player         import Player
 from tia.mixins         import Placable
@@ -23,17 +24,16 @@ class Engine(threading.Thread):
 ###############################################################################
 # CONSTRUCTION AND USAGE
 ###############################################################################
-    def __init__(self):
+    def __init__(self, max_coords):
         super().__init__()
         self.terminated = False
         self.observers  = set()  # contains all observers
         self.containables = (Agent, Player, Command)
         self.containers = {  # associate a class to a container
-            cls: set()
-            for cls in self.containables
+            cls: ctn
+            for cls, ctn in zip(self.containables,
+                                (Placer(max_coords), set(), PriorityQueue(self)))
         }
-        # exception : commands are contained in a PriorityQueue
-        self.containers[Command] = PriorityQueue(self)
         # shortcuts to the containers
         self.invoker = self.containers[Command]
         self.players = self.containers[Player]

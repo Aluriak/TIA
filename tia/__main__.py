@@ -13,7 +13,7 @@ LOGGER = commons.logger()
 
 
 # initialization
-engine = Engine()
+engine = Engine(Coords(100, 100))
 engine.start()  # thread start
 gui  = WorldView(engine)
 term = TerminalManagementInterface(engine, 'lucas')

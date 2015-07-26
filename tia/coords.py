@@ -23,6 +23,10 @@ class Coords:
     def __iter__(self):
         return iter((self.x, self.y))
 
+    @property
+    def as_pair(self):
+        return self.x, self.y
+
     def square_distance_to(self, othr):
         assert(isinstance(othr, Coords))
         return (othr.x - self.x)**2 + (othr.y - self.y)**2
