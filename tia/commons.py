@@ -3,9 +3,10 @@
 import os
 import importlib
 import itertools
-from functools  import partial
-from tia.info   import PACKAGE_NAME
-from tia.logger import logger, log_level
+from collections import deque
+from functools   import partial
+from tia.info    import PACKAGE_NAME
+from tia.logger  import logger, log_level
 
 
 # Directory and file paths
@@ -17,24 +18,24 @@ LOGGER         = logger()
 
 def all_files(path):
     """yield files in given directory"""
-    dirs = [path]
-    for f in os.listdir(dirs):
-        if os.isdir(f):
-            dirs.append(f)
-        else:
-            yield f
+    dirs = deque()
+    dirs.append(path)
+    while len(dirs) > 0:
+        for f in os.listdir(dirs.pop()):
+            if os.path.isdir(f):
+                dirs.append(f)
+            else:
+                yield f
 
 def ressources(ext=None):
     """Return a generator of ressources of given extension(s)"""
     if isinstance(ext, str):
-        print('load ' + ext)
         return (_ for _ in all_files(DIR_RESSOURCES) if _.endswith(ext))
     elif ext is None:
         # get all ressources
         return (_ for _ in all_files(DIR_RESSOURCES))
     else:
         # recursive call
-        print(ext)
         return itertools.chain(*(ressources(_) for _ in ext))
 
 
