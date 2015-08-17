@@ -20,6 +20,7 @@ from tia.commands    import MoveCommand, QuitCommand, TogglePauseCommand
 from tia.agents      import Squad
 from pyglet.window   import key
 from pyglet.window   import mouse
+import tia.commons as commons
 import threading
 import itertools
 import functools
@@ -59,6 +60,10 @@ class WorldView(pyglet.window.Window, threading.Thread):
         self.engine = engine
         self.selected_agent = None
         self.mouse_position = None
+
+        # load graphical ressources
+        for res in commons.ressources(ext='png'):
+            print('Finded ressource: ' + res)
 
         # schedule functions calls
         def schedule_wrap(f):
