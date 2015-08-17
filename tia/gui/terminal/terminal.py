@@ -27,7 +27,6 @@ class TerminalManagementInterface:
         self.engine = engine
         self.player = player
         self.prompt = prompt.create_prompt()
-        self.terminated = False
 
 
     def run(self):
@@ -60,8 +59,8 @@ class TerminalManagementInterface:
     def quit(self, subcmd=None, args=None):
         """quit the game"""
         assert(subcmd is None and args is None)
-        self.terminated = True
         self.engine.add_command(QuitCommand())
+        self.__dict__['terminated'] = True  # override terminated property
 
 
     def lists(self, subcmd, args=None):
@@ -80,6 +79,8 @@ class TerminalManagementInterface:
             print(cmd.ljust(20), self.__class__.__dict__[cmd].__doc__)
 
 
-
+    @property
+    def terminated(self):
+        return self.engine.terminated
 
 

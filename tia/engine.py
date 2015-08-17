@@ -124,9 +124,9 @@ class Engine(threading.Thread):
         return target_reached
 
     def quit(self):
-        LOGGER.info('Engine: quit')
-        self.notify_observers({'quit': True})
         self.terminated = True
+        self.notify_observers({'quit': True})
+        LOGGER.info('Engine: quit')
 
     def agents_at(self, coords, precision=1.):
         return (

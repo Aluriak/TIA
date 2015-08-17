@@ -69,7 +69,7 @@ unalias_level = lambda d: {alias:k for k, aliases in d.items() for alias in alia
 COMMANDS_UNALIAS = unalias_level(COMMANDS)
 SUBCOMMANDS_UNALIAS = unalias_level(SUBCOMMANDS)
 ARGUMENTS_UNALIAS = unalias_level(ARGUMENTS)
-UNALIAS = ChainMap({}, COMMANDS_UNALIAS, SUBCOMMANDS_UNALIAS, ARGUMENTS_UNALIAS)
+UNALIAS = ChainMap({None: None}, COMMANDS_UNALIAS, SUBCOMMANDS_UNALIAS, ARGUMENTS_UNALIAS)
 REV_LEVELS = defaultdict(lambda: 'args', {cmd:level
               for level, cmds in LEVELS.items()
               for cmds in cmds.values()

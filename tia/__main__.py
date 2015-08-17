@@ -20,7 +20,7 @@ term = TerminalManagementInterface(engine, 'lucas')
 engine.register_observer(gui)
 
 gui.start()
-term.run()
+term.run()  # block
 
 
 gui.join()
