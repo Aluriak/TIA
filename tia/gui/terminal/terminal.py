@@ -42,6 +42,8 @@ class TerminalManagementInterface:
                 self.__class__.__dict__[cmd](self, subcmd, args)
         except EOFError:
             pass
+        except KeyboardInterrupt:
+            pass
         # send quit command to engine if user ask the prompt to finish
         if not self.terminated:
             self.quit()
