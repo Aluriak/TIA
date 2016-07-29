@@ -9,6 +9,7 @@ from tia.agents         import Agent
 from tia.player         import Player
 from tia.mixins         import Placable
 from tia.commands       import Command
+from tia.report         import Report
 import tia.time_scheduler as time
 import tia.commons        as commons
 
@@ -28,16 +29,18 @@ class Engine(threading.Thread):
         super().__init__()
         self.terminated = False
         self.observers  = set()  # contains all observers
-        self.containables = (Agent, Player, Command)
-        self.containers = {  # associate a class to a container
-            cls: ctn
-            for cls, ctn in zip(self.containables,
-                                (Placer(max_coords), set(), PriorityQueue(self)))
+        self.containers = {  # containables and containers
+            Agent  : Placer(max_coords),
+            Player : set(),
+            Command: PriorityQueue(self),
+            Report : set(),
         }
+        self.containables = tuple(self.containers.keys())
         # shortcuts to the containers
         self.invoker = self.containers[Command]
         self.players = self.containers[Player]
         self.agents  = self.containers[Agent]
+        self.reports = self.containers[Report]
         LOGGER.info('Engine: initialized')
 
     def run(self):
@@ -68,6 +71,19 @@ class Engine(threading.Thread):
     def add_agent(self, agent):
         assert(isinstance(agent, Agent))
         self.agents.add(agent)
+        self.notify_observers(new_agent=agent)
+
+    def add_report(self, report):
+        if report is None:
+            # TODO: special cases where unit send nothing
+            LOGGER.info("ENGINE: report 'None' received")
+        else:
+            if not isinstance(report, Report):
+                LOGGER.error(str(report) + ' ' + str(report.__class__))
+                assert(isinstance(report, Report))
+            self.reports.add(report)
+            self.notify_observers(new_report=report)
+
 
     def add_player(self, player):
         assert(isinstance(player, Player))
