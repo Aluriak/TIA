@@ -43,10 +43,19 @@ class Engine(threading.Thread):
         self.reports = self.containers[Report]
         LOGGER.info('Engine: initialized')
 
+
     def run(self):
+        """Game loop implementation"""
         LOGGER.info('Engine: thread started')
         while not self.terminated:
+            # collect actions from each agent
+            for agent in self.agents:
+                agent.update(self)
+            # invoke actions from each agent
             self.invoker.execute_next()
+            # dirty sleep avoiding a too quick game
+            time.sleep(0.1)
+
 
     def add(self, obj):
         """add object to the container associated
