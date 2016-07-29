@@ -30,15 +30,21 @@ class AddAgentCommand(Command):
 # EMIT REPORT
 ###############################################################################
 class EmitReportCommand(Command):
-    """
+    """Add a new report to the engine, and add a new one in a number
+     of seconds equals to the unit report timestamp
+
     """
 
-    def __init__(self, report, time_shift=0.01):
+    def __init__(self, unit, time_shift=0.01):
         super().__init__(time_shift)
-        self.report = report
+        self.unit = unit
 
     def execute(self, engine):
-        engine.add_report(self.report)
+        engine.add_report(self.unit.report())
+        engine.add_command(EmitReportCommand(
+            self.unit,
+            time_shift=self.unit.report_timestamp
+        ))
 
 
 
