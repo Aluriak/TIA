@@ -6,6 +6,8 @@ from tia.coords   import Coords
 from tia.agents   import Agent
 
 
+DEFAULT_TIME_SHIFT = 0.00
+
 
 ###############################################################################
 # ADD AGENT
@@ -13,7 +15,7 @@ from tia.agents   import Agent
 class AddAgentCommand(Command):
     """
     """
-    def __init__(self, agent, time_shift=0.01):
+    def __init__(self, agent, time_shift=DEFAULT_TIME_SHIFT):
         super().__init__(time_shift)
         assert(isinstance(agent, Agent))
         assert(agent.__class__ is not Agent)
@@ -35,7 +37,7 @@ class EmitReportCommand(Command):
 
     """
 
-    def __init__(self, unit, time_shift=0.01):
+    def __init__(self, unit, time_shift=DEFAULT_TIME_SHIFT):
         super().__init__(time_shift)
         self.unit = unit
 
@@ -79,7 +81,7 @@ class MoveCommand(Command):
     """Move unit to target, or stop the motion if no target
     """
 
-    def __init__(self, unit, target=None, time_shift=0.01):
+    def __init__(self, unit, target=None, time_shift=DEFAULT_TIME_SHIFT):
         super().__init__(time_shift)
         self.unit   = unit
         self.target = target
@@ -109,7 +111,7 @@ class PrintCommand(Command):
     """
     """
 
-    def __init__(self, message, time_shift=0.01):
+    def __init__(self, message, time_shift=DEFAULT_TIME_SHIFT):
         super().__init__(time_shift)
         self.message = message
 
