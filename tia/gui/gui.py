@@ -66,8 +66,7 @@ class WorldView(pyglet.window.Window, threading.Thread):
         self.mouse_position = None
 
         # load graphical ressources
-        for res in commons.ressources(ext='png'):
-            print('Finded ressource: ' + res)
+        self._load_images()
 
         # schedule functions calls
         def schedule_wrap(f):
@@ -214,13 +213,8 @@ class WorldView(pyglet.window.Window, threading.Thread):
 
     def _load_images(self):
         """populate the list of available images"""
-        self.image = tuple(
-            # pyglet.load.image(image)
-            image
-            for image in commons.ressources('png')
-        )
-        print(self.image)
-
-
-
-
+        self.images = {
+            os.path.splitext(os.path.basename(res))[0]: pyglet.image.load(res)
+            for res in commons.ressources(path=commons.DIR_IMAGES, ext='png')
+        }
+        LOGGER.info('GUI: Loaded images: ' + ', '.join(k for k in self.images))
