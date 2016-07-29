@@ -19,6 +19,14 @@ class Agent:
             name = random_agent_name()
         self.name = name
 
+
+    def update(self, engine):
+        """Called at each game step. Call update method of all bases, except Agent itself."""
+        for base in self._bases:
+            if base is not Agent:
+                base.update(engine)
+
+
     @property
     def movable(self):    return False
     @property

@@ -11,3 +11,5 @@ class Squad(Troop):
     def __init__(self, coords, name=None):
         Troop.__init__(self, coords, name)
 
+    def update(self, engine):
+        Troop.update(self, engine)

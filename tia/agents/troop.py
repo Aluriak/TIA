@@ -1,10 +1,12 @@
 """
 Definition of the mother class of all troops.
+Troops are placable, movable drowable and reportable agents.
+
 """
 from itertools  import chain
 from tia.coords import Coords
 from tia.agents import Agent
-from tia.mixins import Movable, Placable, Drawable, Reportable
+from tia.mixins import Placable, Movable, Drawable, Reportable
 
 
 
@@ -25,6 +27,6 @@ class Troop(Placable, Movable, Drawable, Reportable, Agent):
     @property
     def _bases(self):
         """Return generator of bases"""
-        return chain(self.__class__.__bases__, Troop.__bases__)
+        return set(chain(self.__class__.__bases__, Troop.__bases__))
 
 
