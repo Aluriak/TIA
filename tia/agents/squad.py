@@ -2,8 +2,6 @@
 """
 from tia.coords import Coords
 from tia.agents import Troop
-from tia.mixins import Movable, Placable, Drawable
-
 
 
 class Squad(Troop):

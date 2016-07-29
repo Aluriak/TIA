@@ -36,6 +36,3 @@ class Reportable:
             return '[NEXT REPORT IN ' + str(next_time) + 's]'
         else:
             return '[REPORT LATE OF ' + str(-next_time) + 's]'
-
-
-

@@ -33,5 +33,3 @@ class Coords:
 
     def distance_to(self, othr):
         return math.sqrt(self.square_distance_to(othr))
-
-

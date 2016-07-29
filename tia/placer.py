@@ -5,7 +5,6 @@ Definition of the Placer, that place Placable agents in space.
 from tia.coords         import Coords
 
 
-
 class Placer(dict):
     """
     Container of Placable objects. (objects with coords)
@@ -56,6 +55,3 @@ class Placer(dict):
 
     def __len__(self):
         return len(self.keys())
-
-
-

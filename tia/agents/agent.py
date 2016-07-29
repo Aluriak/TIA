@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
 """
-Definition of an Agent object, that is a printable object with some attributes
-commons to all objects in the game.
+Definition of an Agent object, that is a mixin
+common to all objects in the game.
 
 """
 from tia.coords     import Coords
 from tia.ressources import random_agent_name
-
-
 
 
 class Agent:
@@ -55,5 +52,3 @@ class Agent:
     def _bases(self):
         """Return bases"""
         return self.__class__.__bases__
-
-

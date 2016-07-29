@@ -6,8 +6,6 @@ import queue
 import tia.time_scheduler as time
 
 
-
-
 class PriorityQueue(queue.PriorityQueue):
     """
     Subclass that introduce a big miss in the original API and a
@@ -33,5 +31,3 @@ class PriorityQueue(queue.PriorityQueue):
     def add(self, command):
         """alias for put method"""
         return self.put(command)
-
-

@@ -3,8 +3,6 @@
 import tia.ressources as ressources
 
 
-
-
 class Player:
     """
     """
