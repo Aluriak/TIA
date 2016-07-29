@@ -163,14 +163,33 @@ class WorldView(pyglet.window.Window, threading.Thread):
         if coords is None:
             coords = Coords(random.randint(0,800),
                             random.randint(0,800))
-        self.engine.add_agent(Squad(coords))
+        self.engine.add_command(AddAgentCommand(Squad(coords)))
+
+    def _show_report(self, report):
+        """Add given report in the batch as sprite"""
+        x, y = report.coords
+        # print('COUCOU:',
+            # self.images['strategic_point_ally'],
+            # self.images['strategic_point_ally'].__class__,
+            # x, y,
+            # self.batch,
+            # # self.batch_drawables
+        # )
+        self.sprites.append(pyglet.sprite.Sprite(
+            self.images['report_ally'],
+            x=x, y=y,
+            batch=self.batch,
+            # # group=self.batch_drawables
+        ))
+        print(self.sprites)
 
     def _agent_at(self, x, y):
         """Return agent that is at given coordinates (about MOUSE_PRECISION)"""
+        agent = self.engine.agents_at(Coords(x, y), precision=10.)
         try:
             # take the first placable agent returned by engine
-            return next(self.engine.agents_at(Coords(x, y), precision=10.))
-        except StopIteration:
+            return next(iter(agent))
+        except (StopIteration, TypeError):
             return None
 
     def _move_agents(self, agents=None, coords=None):
