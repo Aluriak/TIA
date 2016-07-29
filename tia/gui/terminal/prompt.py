@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Creation of the prompt used by terminal interface.
 Call create_prompt(0) function for receive a callable that manage the user prompt.
@@ -8,10 +7,6 @@ the user request ready to be treated.
 
 """
 
-
-#########################
-# IMPORTS               #
-#########################
 from prompt_toolkit.contrib.completers                   import WordCompleter
 from prompt_toolkit.contrib.regular_languages.compiler   import compile as pt_compile
 from prompt_toolkit.contrib.regular_languages.completion import GrammarCompleter
@@ -26,7 +21,9 @@ import itertools
 import functools
 import math
 
+
 LOGGER = commons.logger()
+
 
 # some precomputed values
 AGENT_CLASS = {
@@ -102,7 +99,7 @@ def commands_grammar():
     )
     LOGGER.debug('GRAMMAR:\n' + GRAMMAR_RAW)
     return pt_compile(GRAMMAR_RAW)
-GRAMMAR     = commands_grammar()
+GRAMMAR = commands_grammar()
 
 
 class ExampleStyle(DefaultStyle):
@@ -113,8 +110,6 @@ class ExampleStyle(DefaultStyle):
        Token.Operator: 'bg:#662222 #aa3333 bold',
        Token.Other   : 'bg:#662222 #aa3333 bold',
    })
-
-
 
 
 def create_prompt():
@@ -164,6 +159,3 @@ def parse(prompt):
         for _, alias, _ in m.variables().__dict__['_tuples']
     })
     return UNALIAS[var['cmd']], var['subcmd'], var['args']
-
-
-
