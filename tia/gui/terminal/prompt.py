@@ -27,10 +27,8 @@ LOGGER = commons.logger()
 
 # some precomputed values
 AGENT_CLASS = {
-    n.lower(): c
-    for n, c in tia.agents.__dict__.items()
-    if type(c) is type and issubclass(c, tia.agents.Agent)
-    and c is not tia.agents.Agent
+    obj.__name__.lower(): obj
+    for obj in tia.agents.TROOPS
 }
 AGENTS_NAME = tuple(AGENT_CLASS.keys())
 # lexems tokens for pygments
