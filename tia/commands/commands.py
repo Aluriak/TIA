@@ -20,9 +20,9 @@ class AddAgentCommand(Command):
         self.agent = agent
 
     def execute(self, engine):
-        engine.add(self.agent)
+        engine.add_agent(self.agent)
         # new agent must emit its first report
-        engine.add(EmitReportCommand(self.agent.new_report()))
+        engine.add_command(EmitReportCommand(self.agent))
 
 
 

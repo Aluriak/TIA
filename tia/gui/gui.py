@@ -17,6 +17,7 @@ from tia.info        import PACKAGE_NAME
 from tia.mixins      import Drawable, Movable
 from tia.coords      import Coords
 from tia.commands    import MoveCommand, QuitCommand, TogglePauseCommand
+from tia.commands    import AddAgentCommand
 from tia.agents      import Squad
 from pyglet.window   import key
 from pyglet.window   import mouse
