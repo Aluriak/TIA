@@ -19,6 +19,7 @@ from tia.coords      import Coords
 from tia.commands    import MoveCommand, QuitCommand, TogglePauseCommand
 from tia.commands    import AddAgentCommand
 from tia.agents      import Squad
+from tia.report      import Report
 from pyglet.window   import key
 from pyglet.window   import mouse
 import tia.commons as commons
@@ -28,6 +29,7 @@ import functools
 import pyglet
 import random
 import types
+import os
 
 
 
@@ -40,6 +42,7 @@ VIDEO_MODE_X          = 100
 VIDEO_MODE_Y          = 100
 UNIVERSE_DEFAULT_SIZE = (VIDEO_MODE_X, VIDEO_MODE_Y)
 MOUSE_PRECISION       = 20.
+LOGGER                = commons.logger()
 
 
 
