@@ -39,15 +39,6 @@ class Agent:
 ###############################################################################
 # INTERFACE WITH OTHER OBJECTS
 ###############################################################################
-    @property
-    def x(self): return self.coords.x
-    @property
-    def y(self): return self.coords.y
-
-    def __add__(self, othr):
-        if isinstance(othr, Coords):
-            return self.coords + othr
-
     def __str__(self):
         bases = (base for base in self._bases
                  if not issubclass(base, Agent))
