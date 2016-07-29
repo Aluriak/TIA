@@ -14,6 +14,7 @@ with open(commons.DIR_RESSOURCES + 'names.txt') as fd:
     NAMES = cycle(NAMES)
 
 NOUNS_AND_ADJECTIVES = tuple(set((
+    'ghost',
     'orange',
     'pastafarist',
     'remote',
@@ -31,6 +32,7 @@ NOUNS = tuple(set((
     'bus shelter',
     'bread',
     'cat',
+    'cell',
     'connection',
     'day',
     'michel',
@@ -41,8 +43,10 @@ NOUNS = tuple(set((
     'odyssey',
     'person',
     'phase',
+    'ragdoll',
     'seal',
     'server',
+    'shell',
     'solar',
     'space',
     'teapot',
@@ -82,8 +86,10 @@ ADJECTIVES = tuple(set((
     'little',
     'master',
     'mister',
+    'multiple',
     'mysterious',
     'paster',
+    'pink',
     'questionnable',
     'red',
     'speaking',
