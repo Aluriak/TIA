@@ -3,7 +3,7 @@
 from tia.agents         import Squad
 from tia.coords         import Coords
 from tia.engine         import Engine
-from tia.commands       import PrintCommand, MoveCommand, QuitCommand
+from tia.commands       import PrintCommand, QuitCommand, AddAgentCommand
 from tia.gui            import WorldView, TerminalManagementInterface
 import tia.commons as commons
 import random
@@ -20,6 +20,7 @@ def test_whole():
     gui  = WorldView(engine)
     term = TerminalManagementInterface(engine, 'lucas')
     engine.register_observer(gui)
+    engine.add_command(AddAgentCommand(Squad(Coords(100, 100))))
 
     gui.start()
     term.run()  # block
@@ -63,5 +64,5 @@ def test_report():
 
 
 if __name__ == "__main__":
-    # test_whole()
-    test_report()
+    test_whole()
+    # test_report()
