@@ -4,11 +4,11 @@ Definition of the mother class of all troops.
 from itertools  import chain
 from tia.coords import Coords
 from tia.agents import Agent
-from tia.mixins import Movable, Placable, Drawable
+from tia.mixins import Movable, Placable, Drawable, Reportable
 
 
 
-class Troop(Placable, Movable, Drawable, Agent):
+class Troop(Placable, Movable, Drawable, Reportable, Agent):
     """
     """
 
@@ -17,6 +17,7 @@ class Troop(Placable, Movable, Drawable, Agent):
         Placable.__init__(self, coords)
         Movable.__init__(self)
         Drawable.__init__(self, None)
+        Reportable.__init__(self)
 
     def __str__(self):
         return Agent.__str__(self)

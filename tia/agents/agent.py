@@ -23,11 +23,13 @@ class Agent:
         self.name = name
 
     @property
-    def movable(self):  return False
+    def movable(self):    return False
     @property
-    def placable(self): return False
+    def placable(self):   return False
     @property
-    def drawable(self): return False
+    def drawable(self):   return False
+    @property
+    def reportable(self): return False
 
 ###############################################################################
 # INTERFACE WITH OTHER OBJECTS
