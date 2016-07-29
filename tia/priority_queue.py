@@ -19,7 +19,19 @@ class PriorityQueue(queue.PriorityQueue):
         self.target = target
 
     def execute_next(self):
-        """Execute next command on target iff command execution time is coming
+        """Execute next command on target iff command execution time is coming, else do nothing.
+        """
+        try:
+            command = self.get(block=False)
+            if not command.is_executable:
+                self.put(command)
+            else:
+                command.execute(self.target)
+        except queue.Empty:
+            pass
+
+    def wait_and_execute_next(self):
+        """Execute next command on target iff command execution time is coming. Wait for it if necessary.
         """
         command = self.get(block=True)
         while not command.is_executable:
