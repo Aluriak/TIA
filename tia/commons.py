@@ -17,23 +17,24 @@ LOGGER         = logger()
 
 
 def all_files(path):
-    """yield files in given directory"""
+    """yield files in given directory, recursively"""
     dirs = deque()
     dirs.append(path)
     while len(dirs) > 0:
-        for f in os.listdir(dirs.pop()):
+        subdir = dirs.pop()
+        for f in (os.path.join(subdir, _) for _ in os.listdir(subdir)):
             if os.path.isdir(f):
                 dirs.append(f)
             else:
                 yield f
 
-def ressources(ext=None):
-    """Return a generator of ressources of given extension(s)"""
+def ressources(path=DIR_RESSOURCES, ext=None):
+    """Return a generator of ressources find in path of given extension(s)"""
     if isinstance(ext, str):
-        return (_ for _ in all_files(DIR_RESSOURCES) if _.endswith(ext))
+        return (_ for _ in all_files(path) if _.endswith(ext))
     elif ext is None:
         # get all ressources
-        return (_ for _ in all_files(DIR_RESSOURCES))
+        return (_ for _ in all_files(path))
     else:
         # recursive call
         return itertools.chain(*(ressources(_) for _ in ext))
