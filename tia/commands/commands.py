@@ -43,55 +43,21 @@ class EmitReportCommand(Command):
 ###############################################################################
 # MOVE
 ###############################################################################
-class RecursiveMoveCommand(Command):
-    """Move unit to target. Create another instance
-    of RecursiveMoveCommand for perform the next steps.
-    """
+class ChangeMoveTargetCommand(Command):
+    """Change the target of given unit"""
 
-    def __init__(self, time_shift, unit):
-        super().__init__(time_shift)
-        self.unit   = unit
-
-    def execute(self, engine):
-        """
-        """
-        if self.unit.target:  # target defined
-            # move, and create a move action if necessary
-            target_reached = engine.move(self.unit)
-            if target_reached:
-                self.unit.target = None
-            else:  # target not reached
-                engine.add_command(RecursiveMoveCommand(
-                    self.unit.speed,
-                    self.unit
-                ))
-
-
-class MoveCommand(Command):
-    """Move unit to target, or stop the motion if no target
-    """
-
-    def __init__(self, unit, target=None, time_shift=DEFAULT_TIME_SHIFT):
+    def __init__(self, unit, target=None, speed=None,
+                 time_shift=DEFAULT_TIME_SHIFT):
         super().__init__(time_shift)
         self.unit   = unit
         self.target = target
+        self.speed  = speed
 
     def execute(self, engine):
-        """
-        """
-        if not self.unit.movable: return
-        if self.unit.target:
-            # already move: get new target
-            self.unit.target = self.target
-        elif self.target:
-            # not in moving, and new target
-            assert(self.unit.target is None)
-            self.unit.target = self.target
-            engine.add_command(RecursiveMoveCommand(
-                self.unit.speed,
-                self.unit
-            ))
-
+        unit = self.unit
+        assert unit.movable
+        unit.target = self.target
+        unit.speed = unit.speed if self.speed is None else self.speed
 
 
 ###############################################################################
