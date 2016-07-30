@@ -14,8 +14,8 @@ class Troop(Placable, Movable, Drawable, Reportable, Agent):
     """
     """
 
-    def __init__(self, coords, name=None):
-        Agent.__init__(self, name)
+    def __init__(self, coords, name=None, player=None):
+        Agent.__init__(self, name, player)
         Placable.__init__(self, coords)
         Movable.__init__(self)
         Drawable.__init__(self, None)

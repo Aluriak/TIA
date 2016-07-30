@@ -20,7 +20,10 @@ def test_whole():
     gui  = WorldView(engine)
     term = TerminalManagementInterface(engine, 'lucas')
     engine.register_observer(gui)
-    engine.add_command(AddAgentCommand(Squad(Coords(100, 100))))
+    engine.add_command(AddAgentCommand(Squad(Coords(100, 100), player=1)))
+    engine.add_command(AddAgentCommand(Squad(Coords(150, 150), player=2)))
+    engine.add_command(AddAgentCommand(Squad(Coords(150, 100), player=3)))
+    engine.add_command(AddAgentCommand(Squad(Coords(100, 150), player=4)))
 
     gui.start()
     term.run()  # block

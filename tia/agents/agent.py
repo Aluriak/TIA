@@ -14,10 +14,11 @@ class Agent:
 ###############################################################################
 # CONSTRUCTION
 ###############################################################################
-    def __init__(self, name=None):
+    def __init__(self, name=None, player=None):
         if name is None:
             name = random_agent_name()
         self.name = name
+        self.player = player
 
 
     def update(self, engine):
