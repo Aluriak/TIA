@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Graphical representation of the game.
 Commands:
@@ -16,7 +15,8 @@ Commands:
 from tia.info        import PACKAGE_NAME
 from tia.mixins      import Drawable, Movable
 from tia.coords      import Coords
-from tia.commands    import MoveCommand, QuitCommand, TogglePauseCommand
+from tia.commands    import (ChangeMoveTargetCommand, QuitCommand,
+                             TogglePauseCommand)
 from tia.commands    import AddAgentCommand
 from tia.agents      import Squad
 from tia.report      import Report
@@ -38,8 +38,8 @@ import os
 # PRE-DECLARATIONS      #
 #########################
 INTERFACE_TIME_SPEED  = 0.1
-VIDEO_MODE_X          = 100
-VIDEO_MODE_Y          = 100
+VIDEO_MODE_X          = 600
+VIDEO_MODE_Y          = 800
 UNIVERSE_DEFAULT_SIZE = (VIDEO_MODE_X, VIDEO_MODE_Y)
 MOUSE_PRECISION       = 20.
 LOGGER                = commons.logger()
@@ -123,7 +123,9 @@ class WorldView(pyglet.window.Window, threading.Thread):
             if self.selected_agent:
                 print(self.selected_agent)
         elif buttons == pyglet.window.mouse.RIGHT and self.selected_agent is not None:
-            self.engine.add_command(MoveCommand(self.selected_agent, Coords(x, y)))
+            self.engine.add_command(ChangeMoveTargetCommand(
+                self.selected_agent, Coords(x, y)
+            ))
 
     def on_mouse_release(self, x, y, buttons, modifiers):
         self.mouse_position = (x, y)
@@ -154,7 +156,6 @@ class WorldView(pyglet.window.Window, threading.Thread):
         self.close()
         if propagate_to_engine:
             self.engine.add_command(QuitCommand())
-
 
 
 ###############################################################################
@@ -204,11 +205,11 @@ class WorldView(pyglet.window.Window, threading.Thread):
             for movable in self.engine.agents_with((Movable,)):
                 x = random.randint(0,800)
                 y = random.randint(0,600)
-                self.engine.add_command(MoveCommand(movable,
-                                                    Coords(x, y)))
+                self.engine.add_command(ChangeMoveTargetCommand(movable,
+                                                                Coords(x, y)))
         else:
             assert(coords is not None)
-            [self.engine.add_command(MoveCommand(agent, target))
+            [self.engine.add_command(ChangeMoveTargetCommand(agent, target))
              for agent, target in zip(agents, coords)]
 
     def _load_images(self):
