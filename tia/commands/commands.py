@@ -63,6 +63,17 @@ class ChangeMoveTargetCommand(Command):
         unit.speed = unit.speed if self.speed is None else self.speed
 
 
+class RemoveAgentCommand(Command):
+    """Remove given agent from engine"""
+    def __init__(self, unit, time_shift=DEFAULT_TIME_SHIFT):
+        super().__init__(time_shift)
+        self.unit = unit
+
+    def execute(self, engine):
+        engine.rmv_agent(self.unit)
+        print('COMMANDS: Agent removed !')
+
+
 ###############################################################################
 # PRINT
 ###############################################################################
