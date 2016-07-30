@@ -13,6 +13,9 @@ class Placable:
         assert(isinstance(coords, Coords))
         self.coords = coords
 
+    def _update(self, _):
+        pass
+
     @property
     def placable(self):
         return True

@@ -20,20 +20,23 @@ class Agent:
         self.name = name
         self.player = player
 
+    def _update(self, _):
+        """Called at each game step. Call update method of all bases, except Agent itself."""
+        pass
 
     def update(self, engine):
-        """Called at each game step. Call update method of all bases, except Agent itself."""
+        """Interface for update pattern, calling all _update() methods of self bases"""
         for base in self._bases:
             if base is not Agent:
-                base.update(engine)
+                base._update(self, engine)
 
 
     @property
-    def movable(self):    return False
+    def drawable(self):   return False
     @property
     def placable(self):   return False
     @property
-    def drawable(self):   return False
+    def movable(self):    return False
     @property
     def reportable(self): return False
 

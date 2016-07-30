@@ -11,6 +11,9 @@ class Drawable:
     def __init__(self, sprite):
         self.sprite = sprite
 
+    def _update(self, _):
+        pass
+
     @property
     def drawable(self): return True
 

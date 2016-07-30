@@ -19,7 +19,7 @@ class Movable:
         assert speed >= 0.0
         assert self.placable
 
-    def update(self, _):
+    def _update(self, _):
         """Move at each step towards its target"""
         self.move()
 

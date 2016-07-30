@@ -16,12 +16,14 @@ class Reportable:
         self.report_timestamp = timestamp
         self.next_report_texts = []
         self.highest_report_priority = 0
+        self.last_report = None
         self._actualize_report_time()
 
-    def update(self, engine):
+    def _update(self, engine):
         """Send a report if its time"""
         if self.remain_report_time < 0:
-            engine.add_command(commands.EmitReportCommand(self))
+            self.last_report = self.report()
+            engine.add_report(self.last_report)
 
     def add_to_next_report(self, text:str, *, priority=report.Priority.normal):
         """Add given text into next report"""
