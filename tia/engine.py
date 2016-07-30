@@ -84,15 +84,12 @@ class Engine(threading.Thread):
         self.notify_observers(new_agent=agent)
 
     def add_report(self, report):
-        if report is None:
-            # TODO: special cases where unit send nothing
-            LOGGER.info("ENGINE: report 'None' received")
-        else:
-            if not isinstance(report, Report):
-                LOGGER.error(str(report) + ' ' + str(report.__class__))
-                assert(isinstance(report, Report))
-            self.reports.add(report)
-            self.notify_observers(new_report=report)
+        assert report is not None
+        if not isinstance(report, Report):
+            LOGGER.error(str(report) + ' ' + str(report.__class__))
+            assert isinstance(report, Report)
+        self.reports.add(report)
+        self.notify_observers(new_report=report)
 
 
     def add_player(self, player):
