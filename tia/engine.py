@@ -49,8 +49,9 @@ class Engine(threading.Thread):
         LOGGER.info('Engine: thread started')
         while not self.terminated:
             # collect actions from each agent
-            for agent in self.agents:
-                agent.update(self)
+            if not time.is_pause():
+                for agent in self.agents:
+                    agent.update(self)
             # invoke actions from each agent
             self.invoker.execute_next()
             # dirty sleep avoiding a too quick game
