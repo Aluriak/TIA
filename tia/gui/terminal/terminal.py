@@ -27,6 +27,7 @@ class TerminalManagementInterface:
         self.engine = engine
         self.player = player
         self.prompt = prompt.create_prompt()
+        self.terminated = False
 
 
     def run(self):
@@ -40,6 +41,7 @@ class TerminalManagementInterface:
                     continue
                 assert(cmd in self.__class__.__dict__)
                 self.__class__.__dict__[cmd](self, subcmd, args)
+                self.terminated |= self.engine.terminated
         except EOFError:
             pass
         except KeyboardInterrupt:
@@ -62,7 +64,7 @@ class TerminalManagementInterface:
         """quit the game"""
         assert(subcmd is None and args is None)
         self.engine.add_command(QuitCommand())
-        self.__dict__['terminated'] = True  # override terminated property
+        self.terminated = True
 
 
     def lists(self, subcmd, args=None):
@@ -79,10 +81,3 @@ class TerminalManagementInterface:
         print('Grammar:\n', prompt.GRAMMAR_RAW, '\n', sep='')
         for cmd in prompt.LEVELS['cmd']:
             print(cmd.ljust(20), self.__class__.__dict__[cmd].__doc__)
-
-
-    @property
-    def terminated(self):
-        return self.engine.terminated
-
-
