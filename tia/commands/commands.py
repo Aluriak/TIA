@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
 """
+Definition of various commands, designed to be used by players.
+
+These commands/actions should not be used internally,
+and should remain very simple, typically one call to an engine method.
 """
 from tia.commands import Command
 from tia.coords   import Coords

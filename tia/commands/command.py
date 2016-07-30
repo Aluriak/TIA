@@ -1,5 +1,9 @@
-# -*- coding: utf-8 -*-
 """
+Definition of the Command super class
+of commands of the Command pattern.
+
+See commands.py for subclasses.
+
 """
 import tia.time_scheduler as time
 
