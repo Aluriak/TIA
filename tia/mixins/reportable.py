@@ -49,8 +49,8 @@ class Reportable:
         self.next_report_time = time.time() + self.report_timestamp
 
     def __str__(self):
-        next_time = round(self.remain_report_time, 1)
-        if next_time >= 0:
-            return '[NEXT REPORT IN ' + str(next_time) + 's]'
+        remain_time = round(self.remain_report_time, 1)
+        if remain_time > 0:
+            return '[NEXT REPORT IN ' + str(remain_time) + 's]'
         else:
-            return '[REPORT LATE OF ' + str(-next_time) + 's]'
+            return '[REPORT LATE OF ' + str(-remain_time) + 's]'
