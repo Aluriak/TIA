@@ -5,12 +5,14 @@ Definition of the Placer, that place Placable agents in space.
 from tia.coords         import Coords
 
 
-class Placer(dict):
+class Placer:
     """
     Container of Placable objects. (objects with coords)
     A Placer instance contains objects, and rely them through
      their coordinates in space.
     The space is defined at the construction, as a square with origin at (0;0).
+
+    Provides API for nearer objects retrieving.
 
     """
 
@@ -21,30 +23,38 @@ class Placer(dict):
         assert(max_coords.y > min_coords.y)
         self.max_coords = max_coords
         self.min_coords = min_coords
+        self.placables = set()
 
     def add(self, placable, coords=None):
-        """add given placable in the space
+        """register given placable
 
         if coords is not provided, the coords will be asked to the placable.
-        Note that coords or placable.coords can be modified,
+        Note that coords or placable.coords will be modified,
          if the values are not valid in space.
         """
-        assert(coords is None or isinstance(coords, Coords))
-        if coords:
-            coords = self.fix_coords(coords)
-            self[coords.as_pair] = placable
-            placable.coords = coords
-        else:
-            assert(placable.coords is not None)
-            placable.coords = self.fix_coords(placable.coords)
-            self[placable.coords.as_pair] = placable
+        assert coords is None or isinstance(coords, Coords)
+        if not coords:
+            assert placable.coords is not None
+            coords = placable.coords
+        placable.coords = self.fix_coords(coords)
+        self.placables.add(placable)
 
     def __iter__(self):
-        return iter(self.values())
+        return iter(self.placables)
 
     def remove(self, placable, new_coords=None):
-        del self[placable.coords.as_pair]
+        self.placables.remove(placable)
         placable.coords = new_coords
+
+    def neighbors(self, coords, max_dist:float, min_dist:float=0.):
+        """Yield all objects found at a dist between given minimal and maximal bounds.
+        """
+        square_max = max_dist * max_dist
+        square_min = min_dist * min_dist
+        for placable in self.placables:
+            dist = coords.square_distance_to(placable.coords)
+            if square_min <= dist <= square_max:
+                yield placable
 
     def fix_coords(self, coords):
         """Return a fixed version of coords. Returned coords is valid"""
@@ -54,4 +64,4 @@ class Placer(dict):
         )
 
     def __len__(self):
-        return len(self.keys())
+        return len(self.placables)
