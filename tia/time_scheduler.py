@@ -43,13 +43,13 @@ def is_pause():
 def pause():
     'turn on the pause'
     global pause_time
-    assert(pause_time is None)
+    assert pause_time is None
     pause_time = stdtime.time()
 
 def unpause():
     'turn off the pause'
     global late_time, pause_time
-    assert(pause_time is not None)
+    assert pause_time is not None
     # add to late time the amount of time that pass since the pause activation
     late_time += stdtime.time() - pause_time
     pause_time = None

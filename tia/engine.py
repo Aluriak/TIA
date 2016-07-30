@@ -95,11 +95,11 @@ class Engine(threading.Thread):
 
 
     def add_player(self, player):
-        assert(isinstance(player, Player))
+        assert isinstance(player, Player)
         self.players.add(player)
 
     def rmv_agent(self, agent):
-        assert(issubclass(agent, Agent))
+        assert isinstance(agent, Agent)
         try:
             self.agents.remove(agent)
         except KeyError:
