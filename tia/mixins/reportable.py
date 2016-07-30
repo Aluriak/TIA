@@ -11,7 +11,7 @@ class Reportable:
     """The Reportable property allows a component to emit reports
     """
 
-    def __init__(self, timestamp=30):
+    def __init__(self, timestamp=3):
         """By default, the component emit reports all 30 seconds"""
         self.report_timestamp = timestamp
         self.next_report_texts = []
