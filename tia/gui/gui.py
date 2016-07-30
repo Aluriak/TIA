@@ -68,6 +68,20 @@ class WorldView(pyglet.window.Window, threading.Thread):
         # load graphical ressources
         self._load_images()
 
+        # create the batchs (groups of sprites printed together)
+        self.batch           = pyglet.graphics.Batch()
+        # self.batch_drawables = pyglet.graphics.OrderedGroup(0)
+        # self.batch_debug     = pyglet.graphics.OrderedGroup(1)
+
+        # In order to avoid data race, leading to a
+        #  pyglet.gl.lib.GLException: b'invalid operation'
+        # Sprites added by client code are pushed as
+        #  partial object of constructor with all parameters set,
+        #  allowing the on_draw routine to construct and add
+        #  Sprite objects to the sprites container.
+        self.sprite_constructors = set()  # contains all sprites constructors
+        self.sprites = set()  # contains all sprites printed at screen
+
         # schedule functions calls
         def schedule_wrap(f):
             def wrapper(_):
@@ -82,21 +96,22 @@ class WorldView(pyglet.window.Window, threading.Thread):
         pyglet.app.run()
         pyglet.app.exit()
 
-
     def update(self, *args, **kwargs):
         """part of Observer pattern, updated by engine"""
         # define default values, update them with given ones
         kwarg = {
             'terminated' : False,  # True if engine have quit
-            'new report' : None,   # new unit report
-            'new unit'   : None,   # new unit
+            'new_report' : None,   # new unit report
+            'new_unit'   : None,   # new unit
             'quit'       : False,  # True if engine is stopped
         }
         kwarg.update(**kwargs)
         kwarg.update(*args)
         if kwarg['quit']:
             self.on_close(propagate_to_engine=False)
-
+        if kwarg['new_report']:
+            assert isinstance(kwarg['new_report'], Report)
+            self._show_report(kwarg['new_report'])
 
 
 ###############################################################################
@@ -134,12 +149,12 @@ class WorldView(pyglet.window.Window, threading.Thread):
         self.mouse_position = (x, y)
 
     def on_draw(self):
+        # sprites, self.sprites = list(self.sprites), []
+        self.sprites |= {cons() for cons in self.sprite_constructors}
         self.clear()
-        try:
-            self._draw_agents()
-        except pyglet.gl.lib.GLException:
-            self.on_close()
-            print('pyglet.gl.lib.GLException raised')
+        # try:
+        self._draw_agents()
+        self.batch.draw()
 
     def _draw_agents(self):
         """Print current state of engine"""
@@ -171,20 +186,13 @@ class WorldView(pyglet.window.Window, threading.Thread):
     def _show_report(self, report):
         """Add given report in the batch as sprite"""
         x, y = report.coords
-        # print('COUCOU:',
-            # self.images['strategic_point_ally'],
-            # self.images['strategic_point_ally'].__class__,
-            # x, y,
-            # self.batch,
-            # # self.batch_drawables
-        # )
-        self.sprites.append(pyglet.sprite.Sprite(
+        self.sprite_constructors.add(functools.partial(
+            pyglet.sprite.Sprite,
             self.images['report_ally'],
             x=x, y=y,
             batch=self.batch,
-            # # group=self.batch_drawables
+            # group=self.batch_drawables
         ))
-        print(self.sprites)
 
     def _agent_at(self, x, y):
         """Return agent that is at given coordinates (about MOUSE_PRECISION)"""
